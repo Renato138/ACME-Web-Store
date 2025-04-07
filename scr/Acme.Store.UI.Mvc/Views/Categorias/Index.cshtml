@@ -1,0 +1,42 @@
+﻿@model IEnumerable<Acme.Store.UI.Mvc.Models.CategoriaViewModel>
+
+@{
+    ViewData["Title"] = "Categorias";
+}
+
+<h1>Categorias</h1>
+<hr>
+
+<p>
+    <a class="btn btn-primary" asp-action="Create"><spam class="fa fa-plus"></spam> Nova Categoria</a>
+</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Nome)
+            </th>
+            <th>
+                Ações
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Nome)
+                </td>
+                <td>
+                    <a asp-action="Details" class="btn btn-sm btn-info" asp-route-id="@item.Id"><i class="fa fa-search" aria-hidden="true"></i></a>
+                    <a asp-action="Edit" class="btn btn-sm btn-warning" asp-route-id="@item.Id"><i class="fa fa-pencil-alt" aria-hidden="true"></i></a>
+                    <a asp-action="Delete" class="btn btn-sm btn-danger" asp-route-id="@item.Id"><i class="fa fa-trash" aria-hidden="true"></i></a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@* <vc:pagination model-counter="@Model.Count()"></vc:pagination> *@

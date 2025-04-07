@@ -1,0 +1,92 @@
+﻿@using Acme.Store.Business.Models
+@model Acme.Store.UI.Mvc.Models.ProdutoEditarViewModel
+
+@{
+    ViewData["Title"] = "Editar Produto";
+}
+
+@section Links {
+
+}
+
+<div class="container main-container">
+    <h1>Editar Produto</h1>
+    <hr />
+
+    <form enctype="multipart/form-data" asp-action="Edit">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+        <input type="hidden" asp-for="Id" />
+
+        <div class="form-row">
+            <div class="form-group col-md-6 p-1">
+                <label asp-for="Nome" class="control-label"></label>
+                <input asp-for="Nome" class="form-control" />
+                <span asp-validation-for="Nome" class="text-danger"></span>
+            </div>
+
+            <div class="form-group col-md-6 p-1">
+                <label asp-for="Descricao" class="control-label"></label>
+                <textarea asp-for="Descricao" class="form-control" rows="3"></textarea>
+                <span asp-validation-for="Descricao" class="text-danger"></span>
+            </div>
+
+            <div class="form-group col-md-6 p-1">
+                <label asp-for="CategoriaId" class="control-label"></label>
+                <select asp-for="CategoriaId" asp-items="@Model.CategoriasSelectList" class="form-select"></select>
+                <span asp-validation-for="CategoriaId" class="text-danger"></span>
+            </div>
+
+            <div class="form-group col-md-6 p-1">
+                <label asp-for="VendedorId" class="control-label"></label>
+                <select asp-for="VendedorId" asp-items="@Model.VendedoresSelectList" class="form-select"></select>
+                <span asp-validation-for="VendedorId" class="text-danger"></span>
+            </div>
+
+            <div class="form-group col-md-6 p-1">
+                <label asp-for="Preco" class="control-label"></label>
+                <input asp-for="Preco" type="text" class="form-control" data-inputmask="'alias': 'currency', 'min': 0, 'groupSeparator': ',', 'digitSeparator': ',', 'digits': 2, 'digitsOptional': false, 'prefix': 'R$ ', 'placeholder': '0'" />
+                <span asp-validation-for="Preco" class="text-danger"></span>
+            </div>
+
+            <div class="form-group col-md-6 p-1">
+                <label asp-for="QuantidadeEstoque" class="control-label"></label>
+                <input asp-for="QuantidadeEstoque" type="text" class="form-control" data-inputmask="'alias': 'numeric', 'min': 0, 'groupSeparator': ',', 'digits': 0, 'digitsOptional': false, 'prefix': '', 'placeholder': '0'" />
+                <span asp-validation-for="QuantidadeEstoque" class="text-danger"></span>
+            </div>
+
+            <div class="form-group col-md-6 p-1">
+                <label asp-for="UnidadeVenda" class="control-label"></label>
+                <select asp-for="UnidadeVenda" asp-items="Html.GetEnumSelectList<UnidadeVenda>()" asp- class="form-select"></select>
+                <span asp-validation-for="UnidadeVenda" class="text-danger"></span>
+            </div>
+
+            <div class="form-group col-md-6 p-1">
+                <label asp-for="ImagemUpload" class="control-label"></label>
+                <input asp-for="ImagemUpload" type="file" class="form-control" id="ImagemUpload" >
+                <span asp-validation-for="ImagemUpload" class="text-danger"></span>
+            </div>
+
+            <div class="form-group p-1">
+                <input type="submit" value="Salvar" class="btn btn-primary" />
+                <a asp-action="Index" class="btn btn-secondary">Voltar</a>
+            </div>
+        </div>
+    </form>
+
+</div>
+
+@section Scripts 
+{
+    <script src="~/lib/inputmask/dist/jquery.inputmask.js"></script>
+    <script src="~/lib/inputmask/dist/jquery.inputmask.min.js"></script>
+
+    <script type="text/javascript">
+
+        // Initialize InputMask
+        $('input').inputmask();
+
+
+    </script>
+}
+

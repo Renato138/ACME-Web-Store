@@ -1,0 +1,43 @@
+﻿@model PaginationViewModel
+
+<div>
+    <nav aria-label="Page navigation example">
+        <ul class="pagination">
+            <li class=@("page-item" + (Model.TotalItems == 0 || Model.CurrentPage == 1 ? " disabled" : ""))>
+                @if (Model.TotalItems == 0 || Model.CurrentPage == 1)
+                {
+                    <span class="page-link">Anterior</span>
+                }
+                else
+                {
+                    <a class="page-link" asp-controller=@Model.Controller asp-action="ObterPagina" asp-route-page-num="1" asp-route-page-size="20" >Anterior</a>
+                }
+            </li>
+
+            @for (int pageNum = 1; pageNum <= Model.TotalPages; pageNum++)
+            {
+                <li class="page-item" class=@("page-item" + (pageNum == Model.CurrentPage ? " active" : "")) aria-current=@(pageNum == Model.CurrentPage ? "page" : "") >
+                    @if (pageNum == Model.CurrentPage)
+                    {
+                        <span class="page-link">@pageNum</span>
+                    }
+                    else
+                    {
+                        <a class="page-link" asp-controller=@Model.Controller asp-action="ObterPagina" asp-route-page-num=@pageNum asp-route-page-size="20">@pageNum</a>
+                    }
+                </li>
+            }
+
+            <li class=@("page-item" + (Model.TotalItems == 0 || Model.CurrentPage == Model.TotalPages ? " disabled" : ""))>
+                @if (Model.TotalItems == 0 || Model.CurrentPage == Model.TotalPages)
+                {
+                    <span class="page-link">Anterior</span>
+                }
+                else
+                {
+                    <a class="page-link" asp-controller=@Model.Controller asp-action="ObterPagina" asp-route-page-num="1" asp-route-page-size="20">Próxima</a>
+                }
+            </li>
+        </ul>
+    </nav>
+</div>
