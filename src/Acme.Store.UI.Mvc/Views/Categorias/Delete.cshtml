@@ -1,0 +1,36 @@
+﻿@using Acme.Store.Business.Models
+@model Acme.Store.UI.Mvc.Models.CategoriaViewModel
+
+@{
+    ViewData["Title"] = "Excluir Categoria";
+}
+
+<div class="container main-container">
+    @*<h1>@("Excluir Categoria: "  + Model?.Nome ?? "")</h1>*@
+    <h1>Excluir Categoria</h1>
+    <hr />
+
+    <form enctype="multipart/form-data" asp-action="Delete">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="form-row">
+            <input type="hidden" asp-for="Id" />
+
+            <div class="form-group col-md-6 p-1">
+                <label asp-for="Nome" class="control-label"></label>
+                <input asp-for="Nome" class="form-control" disabled />
+            </div>
+
+            <div class="form-group col-md-6 p-1">
+                <label asp-for="Descricao" class="control-label"></label>
+                <textarea asp-for="Descricao" class="form-control" rows="3" disabled></textarea>
+            </div>
+
+            <div class="form-group p-1">
+                <input type="submit" value="Excluir" class="btn btn-danger" />
+                <a asp-action="Index" class="btn btn-secondary">Voltar</a>
+            </div>
+        </div>
+    </form>
+
+</div>
+

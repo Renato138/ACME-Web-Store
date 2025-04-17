@@ -1,0 +1,52 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.12.35707.178
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Acme.Store.Business", "src\Acme.Store.Business\Acme.Store.Business.csproj", "{4F4A56BC-1017-41D3-9143-84A438DC790C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Acme.Store.Data", "src\Acme.Store.Data\Acme.Store.Data.csproj", "{761836C3-BC11-41AE-BE36-00CC5626EF60}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Acme.Store.UI.Mvc", "src\Acme.Store.UI.Mvc\Acme.Store.UI.Mvc.csproj", "{2A35A2ED-8E9C-4828-98D1-255B59151EBF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Acme.Store.Api", "src\Acme.Store.Api\Acme.Store.Api.csproj", "{B1AFCF67-AED3-4716-AE1A-978522ACAFC5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Acme.Store.Auth", "src\Acme.Store.Identity\Acme.Store.Auth.csproj", "{813355E8-CC6D-44EF-AE7C-B6CE8B4352A1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Acme.Store.Abstractions", "src\Acme.Store.Abstractions\Acme.Store.Abstractions.csproj", "{966D470A-17BE-4447-97EF-1AF29EBE6500}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{4F4A56BC-1017-41D3-9143-84A438DC790C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4F4A56BC-1017-41D3-9143-84A438DC790C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4F4A56BC-1017-41D3-9143-84A438DC790C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4F4A56BC-1017-41D3-9143-84A438DC790C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{761836C3-BC11-41AE-BE36-00CC5626EF60}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{761836C3-BC11-41AE-BE36-00CC5626EF60}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{761836C3-BC11-41AE-BE36-00CC5626EF60}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{761836C3-BC11-41AE-BE36-00CC5626EF60}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2A35A2ED-8E9C-4828-98D1-255B59151EBF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2A35A2ED-8E9C-4828-98D1-255B59151EBF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2A35A2ED-8E9C-4828-98D1-255B59151EBF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2A35A2ED-8E9C-4828-98D1-255B59151EBF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B1AFCF67-AED3-4716-AE1A-978522ACAFC5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B1AFCF67-AED3-4716-AE1A-978522ACAFC5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B1AFCF67-AED3-4716-AE1A-978522ACAFC5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B1AFCF67-AED3-4716-AE1A-978522ACAFC5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{813355E8-CC6D-44EF-AE7C-B6CE8B4352A1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{813355E8-CC6D-44EF-AE7C-B6CE8B4352A1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{813355E8-CC6D-44EF-AE7C-B6CE8B4352A1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{813355E8-CC6D-44EF-AE7C-B6CE8B4352A1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{966D470A-17BE-4447-97EF-1AF29EBE6500}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{966D470A-17BE-4447-97EF-1AF29EBE6500}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{966D470A-17BE-4447-97EF-1AF29EBE6500}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{966D470A-17BE-4447-97EF-1AF29EBE6500}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
