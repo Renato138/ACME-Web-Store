@@ -1,4 +1,4 @@
-# **ACME Web Store - Aplicação de Web Store simples com MVC e API RESTful**
+# **ACME Web Store - Aplicação Web Store simples com MVC e API RESTful**
 
 ## **1. Apresentação**
 
