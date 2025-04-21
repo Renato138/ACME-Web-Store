@@ -1,5 +1,6 @@
 ﻿using Acme.Store.Abstractions.Interfaces;
 using Acme.Store.Api.ViewModels;
+using Acme.Store.Auth.Interfaces;
 using Acme.Store.Business.Interfaces;
 using Acme.Store.Business.Interfaces.Repositories;
 using Acme.Store.Business.Interfaces.Services;
@@ -22,7 +23,8 @@ namespace Acme.Store.Api.Controllers
                                     ICategoriaService categoriaService,
                                     IMapper mapper,
                                     ILogger<CategoriasController> logger,
-                                    INotificador notificador) : base(notificador, logger)
+                                    INotificador notificador,
+                                    IAspNetUser aspNetUser) : base(notificador, logger, aspNetUser)
         {
             _categoriaRepository = categoriaRepository;
             _categoriaService = categoriaService;

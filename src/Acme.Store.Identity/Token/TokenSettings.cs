@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Acme.Store.Auth.Settings
+namespace Acme.Store.Auth.Token
 {
     public class TokenSettings
     {
@@ -13,4 +13,5 @@ namespace Acme.Store.Auth.Settings
         public string Emissor { get; set; }
         public string ValidoEm { get; set; }
     }
+
 }

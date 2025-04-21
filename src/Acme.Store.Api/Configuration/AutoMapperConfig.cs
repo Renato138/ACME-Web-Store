@@ -11,32 +11,23 @@ namespace Acme.Store.Api.Configurations
     {
         public AutoMapperConfigProfile()
         {
-            //var brasilCI = CultureInfo.GetCultureInfo("pt-BR");
-            //var usaCI = CultureInfo.GetCultureInfo("en-US");
 
             // Produto
-            //CreateMap<Produto, ProdutoExibirViewModel>()
-            //    .ForMember(dest => dest.UnidadeVenda, opt => opt.MapFrom(src => src.UnidadeVenda.GetDisplayName()))
-            //    .ForMember(dest => dest.Categoria, opt => opt.MapFrom(src => src.Categoria.Nome))
-            //    .ForMember(dest => dest.Vendedor, opt => opt.MapFrom(src => src.Vendedor.Nome))
-            //    .ForMember(dest => dest.Preco, opt => opt.MapFrom(src => src.Preco.ToString("C", brasilCI)))
-            //    .ForMember(dest => dest.QuantidadeEstoque, opt => opt.MapFrom(src => src.QuantidadeEstoque.ToString("N0", brasilCI)));
+            CreateMap<Produto, ProdutoExibirViewModel>()
+                .ForMember(dest => dest.UnidadeVenda, opt => opt.MapFrom(src => src.UnidadeVenda.GetDisplayName()))
+                .ForMember(dest => dest.Categoria, opt => opt.MapFrom(src => src.Categoria.Nome))
+                .ForMember(dest => dest.Vendedor, opt => opt.MapFrom(src => src.Vendedor.Nome));
 
-            //CreateMap<Produto, ProdutoEditarViewModel>()
-            //    .ForMember(dest => dest.Preco, opt => opt.MapFrom(src => src.Preco.ToString("N2", usaCI)))
-            //    .ForMember(dest => dest.QuantidadeEstoque, opt => opt.MapFrom(src => src.QuantidadeEstoque.ToString("N0", usaCI)));
+            CreateMap<Produto, ProdutoEditarViewModel>()
+                .ReverseMap();
 
-            //CreateMap<ProdutoEditarViewModel, Produto>()
-            //    .ForMember(dest => dest.Preco, opt => opt.MapFrom(src => Convert.ToDouble(src.Preco.Replace("R$", "").Replace(",", "").Trim(), usaCI)))
-            //    .ForMember(dest => dest.QuantidadeEstoque, opt => opt.MapFrom(src => int.Parse(src.QuantidadeEstoque.Replace(",", "").Trim())));
+            CreateMap<Produto, ProdutoIncluirViewModel>()
+                .ReverseMap();
 
-            //CreateMap<Produto, ProdutoIncluirViewModel>()
-            //    .ForMember(dest => dest.Preco, opt => opt.MapFrom(src => src.Preco.ToString("N2", usaCI)))
-            //    .ForMember(dest => dest.QuantidadeEstoque, opt => opt.MapFrom(src => src.QuantidadeEstoque.ToString("N0", usaCI)));
 
-            //CreateMap<ProdutoIncluirViewModel, Produto>()
-            //    .ForMember(dest => dest.Preco, opt => opt.MapFrom(src => Convert.ToDouble(src.Preco.Replace("R$", "").Replace(",", "").Trim(), usaCI)))
-            //    .ForMember(dest => dest.QuantidadeEstoque, opt => opt.MapFrom(src => int.Parse(src.QuantidadeEstoque.Replace(",", "").Trim())));
+            // Usuario
+            CreateMap<Usuario, UsuarioViewModel>()
+                .ReverseMap();
 
 
             // Vendedor
@@ -52,6 +43,8 @@ namespace Acme.Store.Api.Configurations
            // Categoria
             CreateMap<Categoria, CategoriaViewModel>()
                 .ReverseMap();
+
+
         }
     }
 }

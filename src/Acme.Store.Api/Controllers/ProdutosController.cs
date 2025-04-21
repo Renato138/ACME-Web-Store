@@ -1,5 +1,6 @@
 ﻿using Acme.Store.Abstractions.Interfaces;
 using Acme.Store.Api.ViewModels;
+using Acme.Store.Auth.Interfaces;
 using Acme.Store.Business.Interfaces;
 using Acme.Store.Business.Interfaces.Repositories;
 using Acme.Store.Business.Interfaces.Services;
@@ -7,6 +8,7 @@ using Acme.Store.Business.Models;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
 
 namespace Acme.Store.Api.Controllers
 {
@@ -22,7 +24,8 @@ namespace Acme.Store.Api.Controllers
                                   IProdutoService produtoService,
                                   IMapper mapper,
                                   ILogger<ProdutosController> logger,
-                                  INotificador notificador) : base(notificador, logger)
+                                  INotificador notificador,
+                                  IAspNetUser aspNetUser) : base(notificador, logger, aspNetUser)
         {
             _produtoRepository = produtoRepository;
             _produtoService = produtoService;

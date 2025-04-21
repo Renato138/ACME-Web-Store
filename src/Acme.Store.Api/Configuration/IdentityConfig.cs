@@ -6,6 +6,8 @@ using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Acme.Store.Data.Context;
 using SixLabors.ImageSharp;
+using Acme.Store.Auth.Token;
+using Microsoft.IdentityModel.Tokens;
 
 namespace Acme.Store.Api.Configuration
 {
@@ -31,30 +33,30 @@ namespace Acme.Store.Api.Configuration
 
             // JWT
 
-            //var appSettingsSection = configuration.GetSection("AppSettings");
-            //services.Configure<AppSettings>(appSettingsSection);
+            var appSettingsSection = builder.Configuration.GetSection("TokenSettings");
+            builder.Services.Configure<TokenSettings>(appSettingsSection);
 
-            //var appSettings = appSettingsSection.Get<AppSettings>();
-            //var key = Encoding.ASCII.GetBytes(appSettings.Secret);
+            var appSettings = appSettingsSection.Get<TokenSettings>();
+            var key = Encoding.ASCII.GetBytes(appSettings.Secret);
 
-            //services.AddAuthentication(x =>
-            //{
-            //    x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-            //    x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            //}).AddJwtBearer(x =>
-            //{
-            //    x.RequireHttpsMetadata = true;
-            //    x.SaveToken = true;
-            //    x.TokenValidationParameters = new TokenValidationParameters
-            //    {
-            //        ValidateIssuerSigningKey = true,
-            //        IssuerSigningKey = new SymmetricSecurityKey(key),
-            //        ValidateIssuer = true,
-            //        ValidateAudience = true,
-            //        ValidAudience = appSettings.ValidoEm,
-            //        ValidIssuer = appSettings.Emissor
-            //    };
-            //});
+            builder.Services.AddAuthentication(auth =>
+            {
+                auth.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                auth.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(x =>
+            {
+                x.RequireHttpsMetadata = true;
+                x.SaveToken = true;
+                x.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(key),
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidAudience = appSettings.ValidoEm,
+                    ValidIssuer = appSettings.Emissor
+                };
+            });
 
             return builder;
         }

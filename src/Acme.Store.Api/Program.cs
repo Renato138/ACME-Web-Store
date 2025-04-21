@@ -5,7 +5,13 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+builder.Configuration
+    .SetBasePath(builder.Environment.ContentRootPath)
+    .AddJsonFile("appsettings.json", true, true)
+    .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", true, true)
+    .AddEnvironmentVariables();
+
+// ConfigureServices
 
 if (builder.Environment.IsDevelopment())
 {
@@ -18,31 +24,23 @@ else
         o.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 }
 
-
-builder.Services.AddControllers();
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-builder.Services.AddOpenApi();
-
 builder.AddIdentityConfig();
+
+builder.Services.AddApiConfig();
+
+builder.Services.AddSwaggerConfig();
+
+builder.ResolveDependencies();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.MapOpenApi();
-}
+// Configure
 
-app.UseHttpsRedirection();
+app.UseApiConfig(app.Environment);
 
-
-
-app.UseAuthentication();
-app.UseAuthorization();
-
-
-app.MapControllers();
+app.UseSwaggerConfig();
 
 app.UseDbMigrationHelper();
 
 app.Run();
+

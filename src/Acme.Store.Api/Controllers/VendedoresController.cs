@@ -28,7 +28,7 @@ namespace Acme.Store.Api.Controllers
                                     IMapper mapper,
                                     ILogger<VendedoresController> logger,
                                     INotificador notificador,
-                                    IAspNetUser spNetUser) : base(notificador, logger, spNetUser)
+                                    IAspNetUser aspNetUser) : base(notificador, logger, aspNetUser)
         {
             _vendedorRepository = vendedorRepository;
             _vendedorService = vendedorService;

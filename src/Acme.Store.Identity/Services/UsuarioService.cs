@@ -5,7 +5,7 @@ using Acme.Store.Abstractions.Models;
 using Acme.Store.Abstractions.Services;
 using Acme.Store.Auth.Interfaces;
 using Acme.Store.Auth.Models;
-using Acme.Store.Auth.Settings;
+using Acme.Store.Auth.Token;
 using Acme.Store.Auth.Validators;
 using Acme.Store.Data.Services;
 using Microsoft.AspNetCore.Identity;
@@ -20,6 +20,9 @@ using System.Threading.Tasks;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 using System.Net;
 using Acme.Store.Auth.Context;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 
 namespace Acme.Store.Auth.Services
 {
@@ -109,21 +112,23 @@ namespace Acme.Store.Auth.Services
             return true;
         }
 
-        public async Task<bool> Logar(Usuario usuario, bool isPersistent, bool lockoutOnFailure)
+        public async Task<string> Logar(Usuario usuario, TokenSettings tokenSettings, bool isPersistent, bool lockoutOnFailure)
         {
             var result = await _signInManager.PasswordSignInAsync(usuario.Email, usuario.Senha, isPersistent, lockoutOnFailure);
 
             if (result.IsLockedOut)
             {
                 Notificar("Usuário temporariamente bloqueado por tentativas inválidas");
-                return result.Succeeded;
+                return null;
             }
 
-            if (result.Succeeded)
+            if (! result.Succeeded)
             {
                 Notificar("Usuário ou Senha incorretos");
             }
-            return result.Succeeded;
+            var token = GerarJwt(tokenSettings);
+
+            return token;
         }
 
         public async Task<bool> Remover(Guid id)
@@ -186,6 +191,23 @@ namespace Acme.Store.Auth.Services
         public Task<bool> AtualizarSenha(Guid userId, string novaSenha)
         {
             throw new NotImplementedException();
+        }
+
+        private string GerarJwt(TokenSettings tokenSettings)
+        {
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var key = Encoding.ASCII.GetBytes(tokenSettings.Secret);
+            var token = tokenHandler.CreateToken(new SecurityTokenDescriptor
+            {
+                Issuer = tokenSettings.Emissor,
+                Audience = tokenSettings.ValidoEm,
+                Expires = DateTime.UtcNow.AddHours(tokenSettings.ExpiracaoHoras),
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+            });
+
+            var encodedToken = tokenHandler.WriteToken(token);
+
+            return encodedToken;
         }
 
         public override void Dispose()

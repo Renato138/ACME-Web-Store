@@ -1,5 +1,6 @@
 ﻿using Acme.Store.Abstractions.Interfaces.Services;
 using Acme.Store.Auth.Models;
+using Acme.Store.Auth.Token;
 using Acme.Store.Auth.Validators;
 using Microsoft.AspNetCore.Identity;
 using System;
@@ -24,7 +25,7 @@ namespace Acme.Store.Auth.Interfaces
 
         Task<bool> Remover(Guid vendedorId);
 
-        Task<bool> Logar(Usuario usuario, bool isPersistent, bool lockoutOnFailure);
+        Task<string> Logar(Usuario usuario, TokenSettings tokenSettings, bool isPersistent, bool lockoutOnFailure);
 
         Task<bool> ValidarDisponibilidadeEmail(Guid userId, string email);
 
