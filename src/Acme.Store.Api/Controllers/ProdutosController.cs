@@ -9,6 +9,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
+using System.Net;
 
 namespace Acme.Store.Api.Controllers
 {
@@ -16,18 +17,15 @@ namespace Acme.Store.Api.Controllers
     [Route("api/produtos")]
     public class ProdutosController : MainController
     {
-        private readonly IProdutoRepository _produtoRepository;
         private readonly IProdutoService _produtoService;
         private readonly IMapper _mapper;
 
-        public ProdutosController(IProdutoRepository produtoRepository,
-                                  IProdutoService produtoService,
+        public ProdutosController(IProdutoService produtoService,
                                   IMapper mapper,
                                   ILogger<ProdutosController> logger,
                                   INotificador notificador,
                                   IAspNetUser aspNetUser) : base(notificador, logger, aspNetUser)
         {
-            _produtoRepository = produtoRepository;
             _produtoService = produtoService;
             _mapper = mapper;
         }
@@ -35,44 +33,55 @@ namespace Acme.Store.Api.Controllers
         [HttpGet]
         public async Task<IEnumerable<ProdutoExibirViewModel>> ObterTodos()
         {
-            return _mapper.Map<IEnumerable<ProdutoExibirViewModel>>(await _produtoRepository.ObterTodos());
+            if (!_aspNetUser.IsAuthenticated)
+                return (new ProdutoExibirViewModel[] { });
+
+            return _mapper.Map<IEnumerable<ProdutoExibirViewModel>>(_produtoService.ObterTodos(_aspNetUser));
+
         }
 
         [HttpGet("{id:guid}")]
         public async Task<ActionResult<ProdutoExibirViewModel>> ObterPorId(Guid id)
         {
-            var produto = _mapper.Map<ProdutoExibirViewModel>(await _produtoRepository.ObterPorId(id));
+            if (!_aspNetUser.IsAuthenticated)
+                return Unauthorized();
+
+            var produto = await _produtoService.ObterPorId(_aspNetUser, id);
 
             if (produto == null)
-                return NotFound();
+            {
+                if (OperacaoValida())
+                    return NotFound();
+                else
+                    return CustomResponse(null);
+            }
 
             return _mapper.Map<ProdutoExibirViewModel>(produto);
         }
 
-        [HttpGet("obter-por-vendedor/{vendedorId:guid}")]
-        public async Task<IEnumerable<ProdutoExibirViewModel>> ObterPorVendedor(Guid vendedorId)
-        {
-            return _mapper.Map<IEnumerable<ProdutoExibirViewModel>>(await _produtoRepository.ObterPorVendedor(vendedorId));
-        }
-
         [HttpGet("obter-por-categoria/{categoriaId:guid}")]
-        public async Task<IEnumerable<ProdutoExibirViewModel>> ObterPorPCategoria(Guid categoriaId)
+        public async Task<IEnumerable<ProdutoExibirViewModel>> ObterPorCategoria(Guid categoriaId)
         {
-            return _mapper.Map<IEnumerable<ProdutoExibirViewModel>>(await _produtoRepository.ObterPorCategoria(categoriaId));
+            if (!_aspNetUser.IsAuthenticated)
+                return (new ProdutoExibirViewModel[] { });
+
+            return _mapper.Map<IEnumerable<ProdutoExibirViewModel>>(await _produtoService.ObterPorCategoria(_aspNetUser, categoriaId));
+
         }
 
         [HttpPost]
         public async Task<ActionResult> Adicionar(ProdutoIncluirViewModel produtoViewModel)
         {
+            if (!_aspNetUser.IsAuthenticated)
+                return Unauthorized();
+
             if (!ModelState.IsValid)
-            {
                 return CustomResponse(ModelState);
-            }
 
             var imagemBase64 = produtoViewModel.ImagemBase64;
             var produto = _mapper.Map<Produto>(produtoViewModel);
 
-            await _produtoService.Adicionar(produto, imagemBase64);
+            await _produtoService.Adicionar(_aspNetUser, produto, imagemBase64);
 
             return CustomResponse(_mapper.Map<ProdutoIncluirViewModel>(produto));
         }
@@ -80,6 +89,11 @@ namespace Acme.Store.Api.Controllers
         [HttpPut("{id:guid}")]
         public async Task<ActionResult> Atualizar(Guid id, ProdutoEditarViewModel produtoViewModel)
         {
+            if (!_aspNetUser.IsAuthenticated)
+            {
+                return Unauthorized();
+            }
+
             if (id != produtoViewModel.Id)
             {
                 NotificarErro("O id informado não é mesmo que foi informado na query.");
@@ -94,7 +108,7 @@ namespace Acme.Store.Api.Controllers
             var imagemBase64 = produtoViewModel.ImagemBase64;
             var produto = _mapper.Map<Produto>(produtoViewModel);
 
-            await _produtoService.Atualizar(produto, imagemBase64);
+            await _produtoService.Atualizar(_aspNetUser, produto, imagemBase64);
 
             return CustomResponse(_mapper.Map<ProdutoEditarViewModel>(produto));
 
@@ -103,10 +117,10 @@ namespace Acme.Store.Api.Controllers
         [HttpDelete("{id:guid}")]
         public async Task<ActionResult> Remover(Guid id)
         {
-            if (!await _produtoRepository.Existe(id))
+            if (!await _produtoService.Existe(id))
                 return NotFound();
 
-            await _produtoRepository.Remover(id);
+            await _produtoService.Remover(_aspNetUser, id);
 
             return CustomResponse();
         }

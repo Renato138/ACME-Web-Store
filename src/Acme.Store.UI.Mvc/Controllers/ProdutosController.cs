@@ -91,7 +91,7 @@ namespace Acme.Store.UI.Mvc.Controllers
                 var formFile = produto.ImagemUpload;
                 var prod = _mapper.Map<Produto>(produto);
 
-                await _produtoService.Adicionar(prod, formFile);
+                //await _produtoService.Adicionar(prod, formFile);
 
                 if (OperacaoValida())
                 {
@@ -148,7 +148,7 @@ namespace Acme.Store.UI.Mvc.Controllers
                 var formFile = produto.ImagemUpload;
                 var prod = _mapper.Map<Produto>(produto);
 
-                await _produtoService.Atualizar(prod, formFile);
+                //await _produtoService.Atualizar(prod, formFile);
 
                 if (OperacaoValida())
                 {

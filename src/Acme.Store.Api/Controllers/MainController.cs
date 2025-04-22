@@ -27,7 +27,7 @@ namespace Acme.Store.Api.Controllers
             _logger = logger;
             _aspNetUser = spNetUser;
 
-            UsuarioAutenticado = _aspNetUser?.IsAuthenticated() ?? false;
+            UsuarioAutenticado = _aspNetUser?.IsAuthenticated ?? false;
             UsuarioId = UsuarioAutenticado ? _aspNetUser.GetUserId() : Guid.Empty;
         }
 

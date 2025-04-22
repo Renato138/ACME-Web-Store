@@ -12,7 +12,7 @@ namespace Acme.Store.Auth.Interfaces
         string Name { get; }
         Guid GetUserId();
         string GetUserEmail();
-        bool IsAuthenticated();
+        bool IsAuthenticated { get; }
         bool IsInRole(string role);
         IEnumerable<Claim> GetClaimsIdentity();
     }

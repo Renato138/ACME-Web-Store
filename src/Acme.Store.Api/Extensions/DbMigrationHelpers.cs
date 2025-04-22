@@ -1,4 +1,5 @@
 ﻿using Acme.Store.Auth.Context;
+using Acme.Store.Business.Constants;
 using Acme.Store.Business.Models;
 using Acme.Store.Data.Context;
 using Microsoft.AspNetCore.Identity;
@@ -9,8 +10,6 @@ namespace Acme.Store.Api.Extensions
 {
     public static class DbMigrationHelpers
     {
-        private const string RoleAdmin = "Admin";
-        private const string RoleVendedor = "Vendedor";
         public static async Task EnsureSeedData(WebApplication app)
         {
             var services = app.Services.CreateScope().ServiceProvider;
@@ -34,7 +33,7 @@ namespace Acme.Store.Api.Extensions
                     await contextIdentity.Database.MigrateAsync();
 
                     await CriarRoles(roleManager);
-                    await CriarUsuario(userManager, "admin@acme.com.br", "Admin!138", RoleAdmin);
+                    await CriarUsuario(userManager, "admin@acme.com.br", "Admin!138", Roles.Admin);
                     await EnsureSeedProducts(contextBusiness, userManager);
 
                 }
@@ -139,15 +138,15 @@ namespace Acme.Store.Api.Extensions
 
         private static async Task CriarRoles(RoleManager<IdentityRole> roleManager)
         {
-            if (! await roleManager.RoleExistsAsync(RoleAdmin))
+            if (! await roleManager.RoleExistsAsync(Roles.Admin))
             {
-                await roleManager.CreateAsync(new IdentityRole(RoleAdmin));
+                await roleManager.CreateAsync(new IdentityRole(Roles.Admin));
             }
-            if (! await roleManager.RoleExistsAsync(RoleAdmin))
+
+            if (! await roleManager.RoleExistsAsync(Roles.Vendedor))
             {
-                await roleManager.CreateAsync(new IdentityRole(RoleVendedor));
+                await roleManager.CreateAsync(new IdentityRole(Roles.Vendedor));
             }
-            await roleManager.CreateAsync(new IdentityRole(RoleVendedor));
         }
 
 

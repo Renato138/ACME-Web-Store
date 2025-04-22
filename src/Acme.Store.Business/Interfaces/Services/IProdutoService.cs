@@ -1,4 +1,6 @@
 ﻿using Acme.Store.Abstractions.Interfaces.Services;
+using Acme.Store.Abstractions.Models;
+using Acme.Store.Auth.Interfaces;
 using Acme.Store.Business.Models;
 using Acme.Store.Business.Validators;
 using Microsoft.AspNetCore.Http;
@@ -7,12 +9,22 @@ namespace Acme.Store.Business.Interfaces.Services
 {
     public interface IProdutoService : IBaseService<ProdutoValidator, Produto>
     {
-        Task Adicionar(Produto produto, string imagemBase64);
+        Task<IEnumerable<Produto>> ObterTodos(IAspNetUser aspNetUser);
 
-        Task Adicionar(Produto produto, IFormFile arquivoImagem);
+        Task<IEnumerable<Produto>> ObterPorCategoria(IAspNetUser aspNetUser, Guid categoriaId);
 
-        Task Atualizar(Produto produto, string imagemBase64);
+        Task<Produto> ObterPorId(IAspNetUser aspNetUser, Guid id);
 
-        Task Atualizar(Produto produto, IFormFile arquivoImagem);
+        Task<bool> Existe(Guid produtoId);
+
+        Task Adicionar(IAspNetUser aspNetUser, Produto produto, string imagemBase64);
+
+        Task Adicionar(IAspNetUser aspNetUser, Produto produto, IFormFile arquivoImagem);
+
+        Task Atualizar(IAspNetUser aspNetUser, Produto produto, string imagemBase64);
+
+        Task Atualizar(IAspNetUser aspNetUser, Produto produto, IFormFile arquivoImagem);
+
+        Task Remover(IAspNetUser aspNetUser, Guid produtoId);
     }
 }
