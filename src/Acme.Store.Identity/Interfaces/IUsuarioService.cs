@@ -25,7 +25,9 @@ namespace Acme.Store.Auth.Interfaces
 
         Task<bool> Remover(Guid vendedorId);
 
-        Task<string> Logar(Usuario usuario, TokenSettings tokenSettings, bool isPersistent, bool lockoutOnFailure);
+        Task<string> LogarApi(Usuario usuario, TokenSettings tokenSettings, bool isPersistent, bool lockoutOnFailure);
+
+        //Task<string> LogarSite(Usuario usuario, bool isPersistent, bool lockoutOnFailure);
 
         Task<bool> ValidarDisponibilidadeEmail(Guid userId, string email);
 

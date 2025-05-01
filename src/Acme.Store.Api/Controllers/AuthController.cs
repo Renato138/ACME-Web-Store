@@ -40,7 +40,7 @@ namespace Acme.Store.Api.Controllers
 
             var usuario = _mapper.Map<Usuario>(usuarioViewModel);
 
-            var token = await _usuarioService.Logar(usuario, _tokenSettings, false, true);
+            var token = await _usuarioService.LogarApi(usuario, _tokenSettings, false, true);
             
             if (string.IsNullOrWhiteSpace(token))
             {

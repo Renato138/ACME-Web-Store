@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
-namespace Acme.Store.Api.Extensions
+namespace Acme.Store.FirstRun
 {
     public static class DbMigrationHelpers
     {

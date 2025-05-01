@@ -1,4 +1,4 @@
-﻿namespace Acme.Store.Api.Extensions
+﻿namespace Acme.Store.FirstRun
 {
     public static class DbMigrationHelperExtension
     {

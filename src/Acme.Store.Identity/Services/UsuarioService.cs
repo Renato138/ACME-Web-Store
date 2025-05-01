@@ -23,6 +23,7 @@ using Acme.Store.Auth.Context;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using SignInResult = Microsoft.AspNetCore.Identity.SignInResult;
 
 namespace Acme.Store.Auth.Services
 {
@@ -112,7 +113,7 @@ namespace Acme.Store.Auth.Services
             return true;
         }
 
-        public async Task<string> Logar(Usuario usuario, TokenSettings tokenSettings, bool isPersistent, bool lockoutOnFailure)
+        public async Task<string> LogarApi(Usuario usuario, TokenSettings tokenSettings, bool isPersistent, bool lockoutOnFailure)
         {
             var result = await _signInManager.PasswordSignInAsync(usuario.Email, usuario.Senha, isPersistent, lockoutOnFailure);
 
@@ -122,13 +123,30 @@ namespace Acme.Store.Auth.Services
                 return null;
             }
 
-            if (! result.Succeeded)
+            if (!result.Succeeded)
             {
                 Notificar("Usuário ou Senha incorretos");
             }
             var token = GerarJwt(tokenSettings);
 
             return token;
+        }
+
+        public async Task<SignInResult> LogarSite(Usuario usuario, bool isPersistent, bool lockoutOnFailure)
+        {
+            var result = await _signInManager.PasswordSignInAsync(usuario.Email, usuario.Senha, isPersistent, lockoutOnFailure);
+
+            if (result.IsLockedOut)
+            {
+                Notificar("Usuário temporariamente bloqueado por tentativas inválidas");
+                return null;
+            }
+
+            if (!result.Succeeded)
+            {
+                Notificar("Usuário ou Senha incorretos");
+            }
+            return result;
         }
 
         public async Task<bool> Remover(Guid id)

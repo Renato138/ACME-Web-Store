@@ -1,5 +1,5 @@
 using Acme.Store.Api.Configuration;
-using Acme.Store.Api.Extensions;
+using Acme.Store.FirstRun;
 using Acme.Store.Data.Context;
 using Microsoft.EntityFrameworkCore;
 
