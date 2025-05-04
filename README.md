@@ -70,11 +70,7 @@ A estrutura do projeto é organizada da seguinte forma:
 - Visual Studio 2022 ou superior (ou qualquer IDE de sua preferência)
 - Git
 
-## **7. Primeira execução**
-
-### **Pré-requisitos**
-
-### **Passos para Execução**
+## **7. Instruções de Configuração**
 
 1. **Clone o Repositório:**
    - `git clone https://github.com/seu-usuario/nome-do-repositorio.git`
@@ -95,7 +91,10 @@ A estrutura do projeto é organizada da seguinte forma:
    - `dotnet run`
    - Acesse a documentação da API em: http://localhost:5001/swagger
 
-## **7. Instruções de Configuração**
+## **8. Primeira execução**
+Em caso de primeira execução em modo desenvolvimento, delete a pasta Database contida tanto no projeto de interface de usuário (Acme.Store.UI.Mvc), quanto do projeto da API. Em modo de desenvolvimento estas base são distintas e contida em cada projeto.
+
+### **Passos para Execução**
 
 Ao ser executado pela primeira vez em mode de desenvolvimento o sistema ira criar a base de dados utilizando o banco de dados SQLite. Nesta execução
 ele irá criar:
@@ -114,18 +113,20 @@ ele irá criar:
   
  - Três categorias de produtos. 
   
- - Quatro produtos, dois para o primeiro vendedor e outros dois para o segundo. 
+ - Quatro produtos, dois para o primeiro vendedor e outros dois para o segundo.
+
+Voce pode utilizar qualquer dos usuário acima para logar na aplicação.
   
 - **JWT para API:** As chaves de configuração do JWT estão no `appsettings.json`.
 - **Migrações do Banco de Dados:** As migrações são gerenciadas pelo Entity Framework Core. Não é necessário aplicar devido a configuração do Seed de dados.
 
-## **8. Documentação da API**
+## **9. Documentação da API**
 
 A documentação da API está disponível através do Swagger. Após iniciar a API, acesse a documentação em:
 
 http://localhost:5001/swagger
 
-## **9. Avaliação**
+## **10. Avaliação**
 
 - Este projeto é parte de um curso acadêmico e não aceita contribuições externas. 
 - Para feedbacks ou dúvidas utilize o recurso de Issues
