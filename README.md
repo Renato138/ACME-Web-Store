@@ -43,23 +43,23 @@ A estrutura do projeto é organizada da seguinte forma:
   - Acme.Store.Api/ - API RESTful
   - Acme.Store.Business/ - Modelo de Negócio
   - Acme.Store.Data/ - Modelo de Acesso a Dados e Configuração do EF Core
+  - Acme.Store.Abstractions - Interfaces e classes básicas utilizadas pelo modelo de negócio. Estas interfaces e classes foram removidas da biblioteca de Modelo de Negócio (Acme.Store.Business) para facilitar o reaproveitamento de código e uso em outras bibliotecas e projetos.
+  - Acme.Store.Auth - Modelo de autorização e autenticação. Possui as classes e DbContext do Identity, bem como todo código relativo compartilhado pela API e pela aplicação MVC.
 - README.md - Arquivo de Documentação do Projeto
 - FEEDBACK.md - Arquivo para Consolidação dos Feedbacks
 - .gitignore - Arquivo de Ignoração do Git
 
 ## **5. Funcionalidades**
 
-- Implementadas
-  - **Reposítórios de Dados:** Acesso centralizado aos dados por meio de reposítórios e serviços.
-  - **Validação de Dados:** Validação dos dados popr meios de serviços, permitindo a integridade dos dados e da regra de negócio.
-  - **Serviço de Notificação:** Mensagens de validação e regras são enviadas às camadas de Ui e API através do serviço de notificação.
-  - **Serviço de Validação e Tratamento de Imagens:** Verificação do formato e integridade do arquivo de imagem, redimensionamento da imagem para tamanho máximo padrão, conversão da imagem para string Base64.
+- **Reposítórios de Dados:** Acesso centralizado aos dados por meio de reposítórios e serviços.
+- **Validação de Dados:** Validação dos dados popr meios de serviços, permitindo a integridade dos dados e da regra de negócio.
+- **Serviço de Notificação:** Mensagens de validação e regras são enviadas às camadas de Ui e API através do serviço de notificação.
+- **Serviço de Validação e Tratamento de Imagens:** Verificação do formato e integridade do arquivo de imagem, redimensionamento da imagem para tamanho máximo padrão, conversão da imagem para string Base64.
   - **CRUD para Entidades do Negócio:** Permite criar, editar, visualizar e excluir produtos (incluindo imagem), vendedores e categprias de produto.
 
-- Em Desenvolvimento
-  - **Autenticação e Autorização:** Diferenciação entre usuários comuns e administradores.
-  - **API RESTful:** Exposição de endpoints para operações CRUD via API.
-  - **Documentação da API:** Documentação automática dos endpoints da API utilizando Swagger.
+- **Autenticação e Autorização:** O modelo de Autenticação e Autorização está desenvolvido em uma dll a parte para ser compartilhada pela API e pela interace MVC.
+- **API RESTful:** Exposição de endpoints para operações CRUD via API.
+- **Documentação da API:** Documentação automática dos endpoints da API utilizando Swagger.
 
 ## **6. Como Executar o Projeto**
 
@@ -69,6 +69,10 @@ A estrutura do projeto é organizada da seguinte forma:
 - SQL Server / SQLite
 - Visual Studio 2022 ou superior (ou qualquer IDE de sua preferência)
 - Git
+
+## **7. Primeira execução**
+
+### **Pré-requisitos**
 
 ### **Passos para Execução**
 
@@ -93,6 +97,25 @@ A estrutura do projeto é organizada da seguinte forma:
 
 ## **7. Instruções de Configuração**
 
+Ao ser executado pela primeira vez em mode de desenvolvimento o sistema ira criar a base de dados utilizando o banco de dados SQLite. Nesta execução
+ele irá criar:
+ - O usuário administrador do sistema, que tem acesso irrestrito a todas as funcionalidades e não está associado com um vendedor.
+   - Loging: admin@acme.com
+   - Senha: Admin!138
+  
+ - Dois vendedores/usuários com algumas funcionalidades restritas. 
+   - Nome: Papa-Leguas
+   - E-mail/Loging: papaleguas@acme.com
+   - Senha: PapaLeguas!138
+  
+   - Nome: Coiote
+   - E-mail/Loging: coiote@acme.com
+   - Senha: Coiote!138
+  
+ - Três categorias de produtos. 
+  
+ - Quatro produtos, dois para o primeiro vendedor e outros dois para o segundo. 
+  
 - **JWT para API:** As chaves de configuração do JWT estão no `appsettings.json`.
 - **Migrações do Banco de Dados:** As migrações são gerenciadas pelo Entity Framework Core. Não é necessário aplicar devido a configuração do Seed de dados.
 
