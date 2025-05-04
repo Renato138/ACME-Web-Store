@@ -17,6 +17,8 @@ namespace Acme.Store.UI.Mvc.Models
 
         public string Vendedor { get; set; }
 
+        public Guid VendedorId { get; set; }
+
         [DisplayName("Preço")]
         public string Preco { get; set; }
 

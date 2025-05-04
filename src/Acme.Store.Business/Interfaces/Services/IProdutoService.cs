@@ -19,6 +19,8 @@ namespace Acme.Store.Business.Interfaces.Services
 
         Task<Produto> ObterPorId(IAspNetUser aspNetUser, Guid id);
 
+        Task<Produto> ObterPorId(Guid id);
+
         Task<bool> Existe(Guid produtoId);
 
         Task Adicionar(IAspNetUser aspNetUser, Produto produto, string imagemBase64);

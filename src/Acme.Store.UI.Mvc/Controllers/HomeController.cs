@@ -1,32 +1,34 @@
+using Acme.Store.Abstractions.Interfaces;
+using Acme.Store.Auth.Interfaces;
+using Acme.Store.Business.Interfaces.Services;
 using Acme.Store.UI.Mvc.Models;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
 namespace Acme.Store.UI.Mvc.Controllers
 {
-    public class HomeController : Controller
+    public class HomeController : MainController
     {
-        private readonly ILogger<HomeController> _logger;
+        private readonly IProdutoService _produtoService;
+        private readonly IMapper _mapper;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(IProdutoService produtoService,
+                              IMapper mapper,
+                              INotificador notificador,
+                              IAspNetUser aspNetUser,
+                              ILogger<HomeController> logger) : base(notificador, logger, aspNetUser)
         {
-            _logger = logger;
+            _mapper = mapper;
+            _produtoService = produtoService;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
-        }
+            var produtos = _mapper.Map<IEnumerable<ProdutoExibirViewModel>>(await _produtoService.ObterTodos())
+                                .OrderBy(p => p.Nome);
 
-        public IActionResult Privacy()
-        {
-            return View();
-        }
-
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            return View(produtos);
         }
     }
 }

@@ -8,6 +8,7 @@ using Acme.Store.Business.Interfaces.Repositories;
 using Acme.Store.Business.Interfaces.Services;
 using Acme.Store.Business.Models;
 using Acme.Store.Business.Validators;
+using Microsoft.AspNetCore.Identity;
 
 namespace Acme.Store.Data.Services
 {
@@ -15,16 +16,19 @@ namespace Acme.Store.Data.Services
     {
         private IVendedorRepository _vendedorRepository;
         private IUsuarioService _usuarioService;
+        private SignInManager<IdentityUser> _signInManager;
 
         public VendedorService(IVendedorRepository vendedorRepository,
                                IUsuarioService usuarioService,
+                               SignInManager<IdentityUser> signInManager,
                                INotificador notificador) : base(notificador)
         {
             _vendedorRepository = vendedorRepository;
             _usuarioService = usuarioService;
+            _signInManager = signInManager;
         }
 
-        public async Task Adicionar(Vendedor vendedor, string senha, bool emailConfirmed = false)
+        public async Task Adicionar(Vendedor vendedor, string senha, bool emailConfirmed = false, bool logar = false)
         {
 
             if (!ExecutarValidacao(new VendedorValidator(), vendedor))
@@ -64,6 +68,15 @@ namespace Acme.Store.Data.Services
 
             vendedor.Id = Guid.Parse(user.Id);
             await _vendedorRepository.Adicionar(vendedor);
+
+            if (logar)
+            {
+                var result = await _signInManager.PasswordSignInAsync(usuario.Email, usuario.Senha, false, lockoutOnFailure: false);
+                if (! result.Succeeded)
+                {
+                    Notificar("Erro ao efeturar login.");
+                }
+            }
         }
 
         public async Task Atualizar(Vendedor vendedor)

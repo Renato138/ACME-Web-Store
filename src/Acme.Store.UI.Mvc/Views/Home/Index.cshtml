@@ -1,4 +1,6 @@
-﻿@{
+﻿@model IEnumerable<Acme.Store.UI.Mvc.Models.ProdutoExibirViewModel>
+
+@{
     ViewData["Title"] = "Página Inicial";
 }
 
@@ -18,57 +20,22 @@
 
 <div class="container main-container">
     <div class="row text-center">
+        @foreach (var item in Model)
+        {
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="card h-100">
+                    <img class="card-img-top" src=@Html.DisplayFor(modelItem => item.Imagem) height="164" width="253" alt="Produtos">
+                    
+                    <div class="card-body">
+                        <h4 class="card-title">@Html.DisplayFor(modelItem => item.Nome)</h4>
+                        <p class="card-text">@Html.DisplayFor(modelItem => item.Descricao)</p>
+                    </div>
 
-        <div class="col-lg-3 col-md-6 mb-4">
-            <div class="card h-100">
-                <img class="card-img-top" src="img/acme_produtos.png" height="164" width="253" alt="Produtos">
-                <div class="card-body">
-                    <h4 class="card-title">Variedade</h4>
-                    <p class="card-text">A ACME possui uma imensa variedade de produtos. São produtos de alto padrão e excelente qualidade. Venha conferir.</p>
-                </div>
-                <div class="card-footer">
-                    <a href="#" class="btn btn-primary">Saiba mais</a>
+                    <div class="card-footer">
+                        <a href="#" class="btn btn-primary">Comprar</a>
+                    </div>
                 </div>
             </div>
-        </div>
-
-        <div class="col-lg-3 col-md-6 mb-4">
-            <div class="card h-100">
-                <img class="card-img-top" src="img/papa_leguas.png" height="164"" width="253" alt="">
-                <div class="card-body">
-                    <h4 class="card-title">Eficiência</h4>
-                    <p class="card-text">Contando uma equipe altamente qualificada e profissionais de alta performance, a ACME possui a entrega mais rápida do mercado.</p>
-                </div>
-                <div class="card-footer">
-                    <a href="#" class="btn btn-primary">Saiba mais</a>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-lg-3 col-md-6 mb-4">
-            <div class="card h-100">
-                <img class="card-img-top" src="img/coyote.png" height="164" width="253" alt="">
-                <div class="card-body">
-                    <h4 class="card-title">Inteligência</h4>
-                    <p class="card-text">As soluções de logística da ACME são reconhecidas através de prêmios internacionais e utilizadas por milhares de parceiros em todo o globo.</p>
-                </div>
-                <div class="card-footer">
-                    <a href="#" class="btn btn-primary">Saiba mais</a>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-lg-3 col-md-6 mb-4">
-            <div class="card h-100">
-                <img class="card-img-top" src="img/coyote2.png" height="164" width="253" alt="">
-                <div class="card-body">
-                    <h4 class="card-title">Confiança</h4>
-                    <p class="card-text">Venha para a ACME! Sua parceira mais fiel para o sucesso dos seus negócios. Confiança construída com respeito.</p>
-                </div>
-                <div class="card-footer">
-                    <a href="#" class="btn btn-primary">Saiba mais</a>
-                </div>
-            </div>
-        </div>
+        }
     </div>
 </div>

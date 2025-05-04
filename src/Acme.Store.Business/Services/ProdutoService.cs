@@ -37,23 +37,16 @@ namespace Acme.Store.Data.Services
             _vendedorRepository = vendedorRepository;
         }
 
-        public async Task<IEnumerable<Produto>> ObterTodos()
-        {
-            return await _produtoRepository.ObterTodos();
-        }
+        public async Task<IEnumerable<Produto>> ObterTodos() 
+            => await _produtoRepository.ObterTodos();
 
         public async Task<IEnumerable<Produto>> ObterTodos(IAspNetUser aspNetUser)
-        {
-            if (aspNetUser.IsInRole(Roles.Admin))
-                return await _produtoRepository.ObterTodos();
-            else
-                return await _produtoRepository.ObterPorVendedor(aspNetUser.GetUserId());
-        }
+            => aspNetUser.IsInRole(Roles.Admin) 
+                ? await _produtoRepository.ObterTodos() 
+                : await _produtoRepository.ObterPorVendedor(aspNetUser.GetUserId());
 
         public async Task<IEnumerable<Produto>> ObterPorCategoria(Guid categoriaId)
-        {
-            return await _produtoRepository.ObterPorCategoria(categoriaId);
-        }
+            => await _produtoRepository.ObterPorCategoria(categoriaId);
 
         public async Task<IEnumerable<Produto>> ObterPorCategoria(IAspNetUser aspNetUser, Guid categoriaId)
         {
@@ -63,6 +56,9 @@ namespace Acme.Store.Data.Services
                 return await _produtoRepository.ObterPorCategoriaVendedor(aspNetUser.GetUserId(), categoriaId);
         }
 
+        public async Task<Produto> ObterPorId(Guid id)
+            => await _produtoRepository.ObterPorId(id);
+  
         public async Task<Produto> ObterPorId(IAspNetUser aspNetUser, Guid id)
         {
             var produto = await _produtoRepository.ObterPorId(id);
@@ -82,9 +78,7 @@ namespace Acme.Store.Data.Services
         }
 
         public async Task<bool> Existe(Guid id)
-        {
-            return await _produtoRepository.Existe(id);
-        }
+            => await _produtoRepository.Existe(id);
 
         public async Task Adicionar(IAspNetUser aspNetUser, Produto produto, IFormFile arquivoImagem)
         {
@@ -349,9 +343,8 @@ namespace Acme.Store.Data.Services
 
             await _produtoRepository.Remover(produtoId);
         }
-        public override void Dispose()
-        {
-            _produtoRepository?.Dispose();
-        }
+        public override void Dispose() 
+            => _produtoRepository?.Dispose();
+
     }
 }

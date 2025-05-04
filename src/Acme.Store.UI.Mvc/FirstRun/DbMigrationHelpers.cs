@@ -36,7 +36,6 @@ namespace Acme.Store.FirstRun
 
                     await CriarRoles(roleManager);
                     await CriarUsuario(userManager, "admin@acme.com", "Admin!138", Roles.Admin);
-                    await CriarUsuario(userManager, "renato@acme.com", "Renato!138", Roles.Vendedor);
                     await EnsureSeedProducts(contextBusiness, userManager, vendedorService);
                 }
             }
@@ -114,7 +113,7 @@ namespace Acme.Store.FirstRun
                         Preco = 10000.0,
                         QuantidadeEstoque = 50,
                         CategoriaId = categoria1.Id,
-                        VendedorId = vendedor2.Id,
+                        VendedorId = vendedor1.Id,
                         Imagem = Imagem2
                     });
 

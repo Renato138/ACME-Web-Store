@@ -42,13 +42,13 @@ namespace Acme.Store.UI.Mvc.Controllers
             _mapper = mapper;
         }
 
+        [AllowAnonymous]
         public async Task<ActionResult> Index()
         {
-            var produtos = _mapper.Map<IEnumerable<ProdutoExibirViewModel>>(await _produtoService.ObterTodos(_aspNetUser))
+            var produtos = _mapper.Map<IEnumerable<ProdutoExibirViewModel>>(await _produtoService.ObterTodos())
                                 .OrderBy(p => p.Nome);
 
             return View(produtos);
-
         }
 
         [Route("detalhes/{id:guid?}")]
@@ -59,10 +59,15 @@ namespace Acme.Store.UI.Mvc.Controllers
                 return NotFound();
             }
 
-            var produto = await _produtoService.ObterPorId(_aspNetUser, id.Value);
+            var produto = await _produtoService.ObterPorId(id.Value);
             if (produto == null)
             {
                 return NotFound();
+            }
+
+            if (_aspNetUser.GetUserId() != produto.VendedorId)
+            {
+                return Unauthorized();
             }
 
             return View(_mapper.Map<ProdutoExibirViewModel>(produto));
@@ -133,10 +138,15 @@ namespace Acme.Store.UI.Mvc.Controllers
                 return NotFound();
             }
 
-            var produto = await _produtoService.ObterPorId(_aspNetUser, id.Value);
+            var produto = await _produtoService.ObterPorId(id.Value);
             if (produto == null)
             {
                 return NotFound();
+            }
+
+            if (_aspNetUser.GetUserId() != produto.VendedorId)
+            {
+                return Unauthorized();
             }
 
             var produtoVM = _mapper.Map<ProdutoEditarViewModel>(produto);
@@ -206,18 +216,24 @@ namespace Acme.Store.UI.Mvc.Controllers
                 return NotFound();
             }
 
-            var produto = _mapper.Map<ProdutoExibirViewModel>(await _produtoService.ObterPorId(_aspNetUser, id.Value));
+            var produto = await _produtoService.ObterPorId(id.Value);
             if (produto == null)
             {
                 return NotFound();
             }
-            return View(produto);
+
+            if (_aspNetUser.GetUserId() != produto.VendedorId)
+            {
+                return Unauthorized();
+            }
+
+            return View(_mapper.Map<ProdutoExibirViewModel>(produto));
         }
 
         // POST: ProdutosController/Delete/5
         [HttpPost("excluir/{id:guid}")]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Delete(Guid? id, [Bind("Id,Nome,Descricao,CategoriaId,VendedorId,Preco,QuantidadeEstoque,UnidadeVenda,ImagemUpload")] ProdutoEditarViewModel produto)
+        public async Task<ActionResult> Delete(Guid? id, [Bind("Id,Nome,Descricao,CategoriaId,VendedorId,Preco,QuantidadeEstoque,UnidadeVenda,ImagemUpload")] ProdutoExibirViewModel produto)
         {
             if (id == null || id == Guid.Empty)
             {
@@ -226,7 +242,17 @@ namespace Acme.Store.UI.Mvc.Controllers
 
             await _produtoService.Remover(_aspNetUser, id.Value);
 
-            return RedirectOrReturn("Index", "Delete", produto);
+            if (!OperacaoValida())
+            {
+                produto = _mapper.Map<ProdutoExibirViewModel>(await _produtoService.ObterPorId(id.Value));
+                if (produto == null)
+                {
+                    return NotFound();
+                }
+                return View(produto);
+            }
+
+            return Redirect("Index");
         }
 
         private async Task<SelectList> ObterCategoriasSelectList(Guid? selectedId)

@@ -54,6 +54,7 @@ namespace Acme.Store.Api.Controllers
             return _mapper.Map<VendedorViewModel>(vendedor);
         }
 
+        [AllowAnonymous]
         [HttpPost]
         public async Task<ActionResult> Adicionar(VendedorIncluirViewModel vendedorViewModel)
         {

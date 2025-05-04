@@ -3,12 +3,17 @@
 @using Microsoft.AspNetCore.Identity
 
 @inject SignInManager<IdentityUser> _signInManager
+@inject UserManager<IdentityUser> _userManager
 @inject IVendedorRepository _vendedorRepository
 
 <ul class="navbar-nav">
+    <li class="nav-item">
+        <a class="nav-link text-dark"> Vendedor: </a>
+    </li>
     @if (_signInManager.IsSignedIn(User))
     {
-        var vendedor = await _vendedorRepository.ObterPorEmail(User.Identity?.Name);
+        var id = Guid.Parse(_userManager.GetUserId(User));
+        var vendedor = await _vendedorRepository.ObterPorId(id);
         var nome = vendedor?.Nome ?? User.Identity?.Name;
 
         <li class="nav-item">
@@ -33,7 +38,10 @@
     else
     {
         <li class="nav-item">
-            <a class="btn btn-success" asp-area="Identity" asp-page="/Account/Login">Login</a>
+            <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Login">Login</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link text-dark" asp-area="" asp-controller="Vendedores" asp-action="Create">Registre-se</a>
         </li>
     }
 </ul>

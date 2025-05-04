@@ -151,9 +151,19 @@ namespace Acme.Store.UI.Mvc.Controllers
                 return NotFound();
             }
 
-            await _categoriaRepository.Remover(id.Value);
+            await _categoriaService.Remover(id.Value);
 
-            return RedirectOrReturn("Index", "Delete", categoria);
+            if (! OperacaoValida())
+            {
+                categoria = _mapper.Map<CategoriaViewModel>(await _categoriaRepository.ObterPorId(id.Value));
+                if (categoria == null)
+                {
+                    return NotFound();
+                }
+                return View(categoria);
+            }
+
+            return Redirect("Index");
         }
     }
 }

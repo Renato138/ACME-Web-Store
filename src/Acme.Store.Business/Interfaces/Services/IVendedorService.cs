@@ -6,7 +6,7 @@ namespace Acme.Store.Business.Interfaces.Services
 {
     public interface IVendedorService : IBaseService<VendedorValidator, Vendedor>
     {
-        Task Adicionar(Vendedor vendedor, string senha, bool emailConfirmed = false);
+        Task Adicionar(Vendedor vendedor, string senha, bool emailConfirmed = false, bool logar = false);
 
         Task Atualizar(Vendedor vendedor);
 

@@ -19,13 +19,16 @@ namespace Acme.Store.UI.Mvc.Models
         public string Email { get; set; }
 
 
-        [Required(ErrorMessage = "O campo {0} é obrigatório")]
-        [StringLength(UsuarioModelInfo.SenhaMaxLength, ErrorMessage = "O campo {0} precisa ter entre {2} e {1} caracteres", MinimumLength = UsuarioModelInfo.SenhaMinLength)]
+        [Required(ErrorMessage = "A Senha é obrigatória")]
+        [StringLength(UsuarioModelInfo.SenhaMaxLength, ErrorMessage = "A Senha precisa ter entre {2} e {1} caracteres", MinimumLength = UsuarioModelInfo.SenhaMinLength)]
+        [DataType(DataType.Password)]
         public string Senha { get; set; }
 
         [Display(Name = "Confirme a senha")]
+        [StringLength(UsuarioModelInfo.SenhaMaxLength, ErrorMessage = "A Senha precisa ter entre {2} e {1} caracteres", MinimumLength = UsuarioModelInfo.SenhaMinLength)]
         [Required(ErrorMessage = "O campo Confirmação da Senha é obrigatório.")]
         [Compare("Senha", ErrorMessage = "As senhas não conferem.")]
+        [DataType(DataType.Password)]
         public string ConfirmeSenha { get; set; }
     }
 }

@@ -11,6 +11,8 @@ using Acme.Store.Data.Services;
 using Acme.Store.Abstractions.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Acme.Store.Auth.Interfaces;
+using Acme.Store.Business.Constants;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace Acme.Store.UI.Mvc.Controllers
 {
@@ -60,21 +62,26 @@ namespace Acme.Store.UI.Mvc.Controllers
             return View(_mapper.Map<VendedorViewModel>(vendedor));
         }
 
+        [AllowAnonymous]
         [Route("criar-novo")]
         public async Task<ActionResult> Create()
         {
-            var senha = GeneratePassword();
             var vendedor = new VendedorIncluirViewModel();
-            vendedor.Senha = senha;
-            vendedor.ConfirmeSenha = senha;
+
+            //var senha = GeneratePassword();
+            //vendedor.Senha = senha;
+            //vendedor.ConfirmeSenha = senha;
 
             return View(vendedor);
         }
 
+        [AllowAnonymous]
         [HttpPost("criar-novo")]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Create([Bind("Id,Nome,Email,Senha,ConfirmeSenha")] VendedorIncluirViewModel vendedor)
         {
+            var isAdmin = _aspNetUser.IsAuthenticated && _aspNetUser.IsInRole(Roles.Admin);
+
             if (ModelState.IsValid)
             {
                 if (vendedor == null)
@@ -82,9 +89,17 @@ namespace Acme.Store.UI.Mvc.Controllers
                     return NotFound();
                 }
 
-                await _vendedorService.Adicionar(_mapper.Map<Vendedor>(vendedor), vendedor.Senha, true);
+                await _vendedorService.Adicionar(_mapper.Map<Vendedor>(vendedor), vendedor.Senha, true, ! isAdmin);
 
-                return RedirectOrReturn(nameof(Index), nameof(Create), vendedor);
+                if (isAdmin)
+                    return RedirectOrReturn(nameof(Index), nameof(Create), vendedor);
+                else
+                {
+                    if (OperacaoValida())
+                        return RedirectToAction("Index", "Home");
+                    else
+                        return View(vendedor);
+                }
             }
             return View(vendedor);
         }
@@ -145,7 +160,6 @@ namespace Acme.Store.UI.Mvc.Controllers
             return View(vendedor);
         }
 
-        // POST: VendedoresController/Delete/5
         [HttpPost("excluir/{id:guid}")]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Delete(Guid? id, [Bind("Id,Nome,Email")] VendedorViewModel vendedor)
@@ -155,9 +169,19 @@ namespace Acme.Store.UI.Mvc.Controllers
                 return NotFound();
             }
 
-            await _vendedorRepository.Remover(id.Value);
+            await _vendedorService.Remover(id.Value);
 
-            return RedirectOrReturn("Index", "Delete", vendedor);
+            if (! OperacaoValida())
+            {
+                vendedor = _mapper.Map<VendedorViewModel>(await _vendedorRepository.ObterPorId(id.Value));
+                if (vendedor == null)
+                {
+                    return NotFound();
+                }
+                return View(vendedor);
+            }
+
+            return Redirect("Index");
         }
 
         private static string GeneratePassword()
