@@ -37,14 +37,21 @@ namespace Acme.Store.UI.Mvc.Configurations
                 .ForMember(dest => dest.Preco, opt => opt.MapFrom(src => Convert.ToDouble(src.Preco.Replace("R$", "").Replace(",", "").Trim(), usaCI)))
                 .ForMember(dest => dest.QuantidadeEstoque, opt => opt.MapFrom(src => int.Parse(src.QuantidadeEstoque.Replace(",", "").Trim())));
 
+
             // Vendedor
             CreateMap<Vendedor, VendedorViewModel>()
                 .ReverseMap();
+
+            CreateMap<Vendedor, VendedorIncluirViewModel>()
+                .ReverseMap();
+
             CreateMap<Vendedor, SelectListViewModel>();
+
 
             // Categoria
             CreateMap<Categoria, CategoriaViewModel>()
                 .ReverseMap();
+
             CreateMap<Categoria, SelectListViewModel>();
         }
     }

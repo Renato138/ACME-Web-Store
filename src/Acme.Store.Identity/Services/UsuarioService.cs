@@ -75,7 +75,7 @@ namespace Acme.Store.Auth.Services
             return user;
         }
 
-        public async Task<bool> AtualizarEmail(Guid userId, string novoEmail)
+        public async Task<bool> Atualizar(Guid userId, string novoEmail)
         {
             if (!Validar<EmailValidation>(new EmailValidator(), new EmailValidation(novoEmail)))
             {
@@ -89,6 +89,13 @@ namespace Acme.Store.Auth.Services
                 return false;
             }
 
+            //user = await _userManager.FindByNameAsync(novoNome);
+            //if (user != null && Guid.Parse(user.Id) != userId)
+            //{
+            //    Notificar("Já existe um usuário cadastrado com este nome.");
+            //    return false;
+            //}
+
             user = await _userManager.FindByIdAsync(userId.ToString());
             if (user == null)
             {
@@ -97,6 +104,13 @@ namespace Acme.Store.Auth.Services
             }
 
             var result = await _userManager.SetEmailAsync(user, novoEmail);
+            if (!result.Succeeded)
+            {
+                Notificar(result.Errors.Select(e => e.Description));
+                return false;
+            }
+
+            result = await _userManager.SetUserNameAsync(user, novoEmail);
             if (!result.Succeeded)
             {
                 Notificar(result.Errors.Select(e => e.Description));
@@ -181,11 +195,22 @@ namespace Acme.Store.Auth.Services
         {
             var user = await _userManager.FindByEmailAsync(email);
             return user;
-        }   
+        }
 
         public async Task<bool> ValidarDisponibilidadeEmail(Guid userId, string email)
         {
             var user = await _userManager.FindByEmailAsync(email);
+            if (user != null && Guid.Parse(user.Id) != userId)
+            {
+                Notificar("Já existe um usuário cadastrado com este email.");
+                return false;
+            }
+            return true;
+        }
+
+        public async Task<bool> ValidarDisponibilidadeNome(Guid userId, string nome)
+        {
+            var user = await _userManager.FindByNameAsync(nome);
             if (user != null && Guid.Parse(user.Id) != userId)
             {
                 Notificar("Já existe um usuário cadastrado com este email.");
@@ -204,11 +229,6 @@ namespace Acme.Store.Auth.Services
             Notificar(validationResult);
 
             return false;
-        }
-
-        public Task<bool> AtualizarSenha(Guid userId, string novaSenha)
-        {
-            throw new NotImplementedException();
         }
 
         private string GerarJwt(TokenSettings tokenSettings)

@@ -13,7 +13,7 @@ namespace Acme.Store.Business.Validators
                 .Length(CategoriaModelInfo.NomeMinLength, CategoriaModelInfo.NomeMaxLength).WithMessage("O campo {PropertyName} precisa ter entre {MinLength} e {MaxLength} caracteres.");
 
             RuleFor(c => c.Descricao)
-                .NotEmpty().WithMessage("O campo {PropertyName} precisa ser fornecido.")
+                .NotEmpty().WithMessage("O campo Descrição precisa ser fornecido.")
                 .Length(CategoriaModelInfo.DescricaoMinLength, CategoriaModelInfo.DescricaoMaxLength).WithMessage("O campo {PropertyName} precisa ter entre {MinLength} e {MaxLength} caracteres.");
 
 

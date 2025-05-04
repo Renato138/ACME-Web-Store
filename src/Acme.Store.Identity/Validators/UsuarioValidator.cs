@@ -13,6 +13,10 @@ namespace Acme.Store.Auth.Validators
     {
         public UsuarioValidator()
         {
+            //RuleFor(v => v.Nome)
+            //   .NotEmpty().WithMessage("O campo {PropertyName} precisa ser fornecido.")
+            //   .Length(UsuarioModelInfo.NomeMinLength, UsuarioModelInfo.NomeMaxLength).WithMessage("O campo {PropertyName} precisa ter entre {MinLength} e {MaxLength} caracteres.");
+
             RuleFor(v => v.Senha)
                 .NotEmpty().WithMessage("O campo {PropertyName} precisa ser fornecido.")
                 .Length(UsuarioModelInfo.SenhaMinLength, UsuarioModelInfo.SenhaMaxLength).WithMessage("O campo {PropertyName} precisa ter entre {MinLength} e {MaxLength} caracteres.");

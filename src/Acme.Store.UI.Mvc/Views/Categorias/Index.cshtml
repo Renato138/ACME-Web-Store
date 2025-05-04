@@ -27,7 +27,9 @@
         {
             <tr>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Nome)
+                    <span data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="@Html.DisplayFor(modelItem => item.Descricao)">
+                        @Html.DisplayFor(modelItem => item.Nome)
+                    </span>
                 </td>
                 <td>
                     <a asp-action="Details" class="btn btn-sm btn-info" asp-route-id="@item.Id"><i class="fa fa-search" aria-hidden="true"></i></a>

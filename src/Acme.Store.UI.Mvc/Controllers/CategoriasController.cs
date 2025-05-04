@@ -9,9 +9,12 @@ using Acme.Store.UI.Mvc.Models;
 using Acme.Store.Business.Models;
 using Acme.Store.Data.Services;
 using Acme.Store.Abstractions.Interfaces;
+using Microsoft.AspNetCore.Authorization;
+using Acme.Store.Auth.Interfaces;
 
 namespace Acme.Store.UI.Mvc.Controllers
 {
+    [Authorize]
     [Route("categorias")]
     public class CategoriasController : MainController
     {
@@ -23,7 +26,8 @@ namespace Acme.Store.UI.Mvc.Controllers
                                     ICategoriaRepository categoriaRepository,
                                     IMapper mapper,
                                     INotificador notificador,
-                                    ILogger<MainController> logger) : base(notificador, logger)
+                                    ILogger<MainController> logger,
+                                    IAspNetUser aspNetUser) : base(notificador, logger, aspNetUser)
         {
             _categoriaService = categoriaService;
             _categoriaRepository = categoriaRepository;

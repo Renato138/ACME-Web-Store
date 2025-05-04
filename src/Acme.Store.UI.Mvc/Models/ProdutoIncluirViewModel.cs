@@ -25,7 +25,7 @@ namespace Acme.Store.UI.Mvc.Models
         public Guid? CategoriaId { get; set; }
 
         [DisplayName("Vendedor")]
-        [Required(ErrorMessage = "O campo {0} é obrigatório.")]
+        //[Required(ErrorMessage = "O campo {0} é obrigatório.")]
         public Guid? VendedorId { get; set; }
 
         [DisplayName("Preço")]

@@ -4,6 +4,7 @@ using Acme.Store.Business.Interfaces;
 using Acme.Store.Business.Models;
 using Acme.Store.Abstractions.Interfaces;
 using Acme.Store.Abstractions.Notitications;
+using Acme.Store.Auth.Interfaces;
 
 namespace Acme.Store.UI.Mvc.Controllers
 {
@@ -12,11 +13,22 @@ namespace Acme.Store.UI.Mvc.Controllers
         protected INotificador _notificador;
         protected ILogger<MainController> _logger;
 
-        public MainController(INotificador notificador, ILogger<MainController> logger)
+        protected IAspNetUser _aspNetUser;
+
+        protected bool UsuarioAutenticado { get; }
+        protected Guid UsuarioId { get; }
+
+        public MainController(INotificador notificador, 
+                              ILogger<MainController> logger,
+                              IAspNetUser spNetUser)
         {
             _logger = logger;
             _notificador = notificador;
             _notificador.NotificacaoAdicionada += OnNotificacaoAdicionada;
+            _aspNetUser = spNetUser;
+
+            UsuarioAutenticado = _aspNetUser?.IsAuthenticated ?? false;
+            UsuarioId = UsuarioAutenticado ? _aspNetUser.GetUserId() : Guid.Empty;
         }
 
         private void OnNotificacaoAdicionada(object sender, NotificacaoEventArgs e)

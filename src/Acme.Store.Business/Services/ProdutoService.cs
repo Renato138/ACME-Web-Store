@@ -37,12 +37,22 @@ namespace Acme.Store.Data.Services
             _vendedorRepository = vendedorRepository;
         }
 
+        public async Task<IEnumerable<Produto>> ObterTodos()
+        {
+            return await _produtoRepository.ObterTodos();
+        }
+
         public async Task<IEnumerable<Produto>> ObterTodos(IAspNetUser aspNetUser)
         {
             if (aspNetUser.IsInRole(Roles.Admin))
                 return await _produtoRepository.ObterTodos();
             else
                 return await _produtoRepository.ObterPorVendedor(aspNetUser.GetUserId());
+        }
+
+        public async Task<IEnumerable<Produto>> ObterPorCategoria(Guid categoriaId)
+        {
+            return await _produtoRepository.ObterPorCategoria(categoriaId);
         }
 
         public async Task<IEnumerable<Produto>> ObterPorCategoria(IAspNetUser aspNetUser, Guid categoriaId)

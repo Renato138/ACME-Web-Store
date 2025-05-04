@@ -14,14 +14,14 @@
         <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
         <div class="form-row">
             <div class="form-group col-md-6 p-1">
-                <label asp-for="Input.Email" class="control-label">Email</label>
-                <input asp-for="Input.Email" class="form-control" autocomplete="username" aria-required="true" placeholder="name@example.com" />
+                <label asp-for="Input.Email" class="control-label"></label>
+                <input asp-for="Input.Email" class="form-control" />
                 <span asp-validation-for="Input.Email" class="text-danger"></span>
             </div>
 
             <div class="form-group col-md-6 p-1">
-                <label asp-for="Input.Senha" class="control-label">Password</label>
-                <input asp-for="Input.Senha" class="form-control" autocomplete="current-password" aria-required="true" placeholder="password" />
+                <label asp-for="Input.Senha" class="control-label"></label>
+                <input asp-for="Input.Senha" class="form-control" />
                 <span asp-validation-for="Input.Senha" class="text-danger"></span>
             </div>
 

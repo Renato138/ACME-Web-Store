@@ -19,9 +19,7 @@ namespace Acme.Store.Auth.Interfaces
 
         Task<IdentityUser> Adicionar(Usuario usuario, bool emailConfirmed = false);
 
-        Task<bool> AtualizarEmail(Guid userId, string novoEmail);
-
-        Task<bool> AtualizarSenha(Guid userId, string novaSenha);
+        Task<bool> Atualizar(Guid userId, string novoEmail);
 
         Task<bool> Remover(Guid vendedorId);
 
@@ -30,6 +28,8 @@ namespace Acme.Store.Auth.Interfaces
         //Task<string> LogarSite(Usuario usuario, bool isPersistent, bool lockoutOnFailure);
 
         Task<bool> ValidarDisponibilidadeEmail(Guid userId, string email);
+
+        //Task<bool> ValidarDisponibilidadeNome(Guid userId, string nome);
 
     }
 }

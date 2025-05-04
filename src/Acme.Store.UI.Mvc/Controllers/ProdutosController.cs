@@ -1,4 +1,6 @@
 ﻿using Acme.Store.Abstractions.Interfaces;
+using Acme.Store.Auth.Interfaces;
+using Acme.Store.Business.Constants;
 using Acme.Store.Business.Interfaces;
 using Acme.Store.Business.Interfaces.Repositories;
 using Acme.Store.Business.Interfaces.Services;
@@ -6,6 +8,7 @@ using Acme.Store.Business.Models;
 using Acme.Store.Business.Pagination;
 using Acme.Store.UI.Mvc.Models;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -15,11 +18,11 @@ using System.Linq;
 
 namespace Acme.Store.UI.Mvc.Controllers
 {
+    [Authorize]
     [Route("produtos")]
     public class ProdutosController : MainController
     {
         private readonly IProdutoService _produtoService;
-        private readonly IProdutoRepository _produtoRepository;
         private readonly ICategoriaRepository _categoriaRepository;
         private readonly IVendedorRepository _vendedorRepository;
         private readonly IMapper _mapper;
@@ -30,9 +33,9 @@ namespace Acme.Store.UI.Mvc.Controllers
                                   IVendedorRepository vendedorRepository,
                                   IMapper mapper,
                                   INotificador notificador, 
-                                  ILogger<MainController> logger) : base(notificador, logger)
+                                  ILogger<MainController> logger,
+                                  IAspNetUser aspNetUser) : base(notificador, logger, aspNetUser)
         {
-            _produtoRepository = produtoRepository;
             _produtoService = produtoService;
             _categoriaRepository = categoriaRepository;
             _vendedorRepository = vendedorRepository;
@@ -41,7 +44,7 @@ namespace Acme.Store.UI.Mvc.Controllers
 
         public async Task<ActionResult> Index()
         {
-            var produtos = _mapper.Map<IEnumerable<ProdutoExibirViewModel>>(await _produtoRepository.ObterTodos())
+            var produtos = _mapper.Map<IEnumerable<ProdutoExibirViewModel>>(await _produtoService.ObterTodos(_aspNetUser))
                                 .OrderBy(p => p.Nome);
 
             return View(produtos);
@@ -56,7 +59,7 @@ namespace Acme.Store.UI.Mvc.Controllers
                 return NotFound();
             }
 
-            var produto = await _produtoRepository.ObterPorId(id.Value);
+            var produto = await _produtoService.ObterPorId(_aspNetUser, id.Value);
             if (produto == null)
             {
                 return NotFound();
@@ -71,12 +74,14 @@ namespace Acme.Store.UI.Mvc.Controllers
             var produtoVM = new ProdutoIncluirViewModel();
 
             produtoVM.CategoriasSelectList = await ObterCategoriasSelectList(produtoVM.CategoriaId);
-            produtoVM.VendedoresSelectList = await ObterVendedoresSelectList(produtoVM.VendedorId);
+            if (_aspNetUser.IsInRole(Roles.Admin))
+            {
+                produtoVM.VendedoresSelectList = await ObterVendedoresSelectList(produtoVM.VendedorId);
+            }
 
             return View(produtoVM);
         }
 
-        // POST: ProdutosController/Create
         [ValidateAntiForgeryToken]
         [HttpPost("criar-novo")]
         public async Task<IActionResult> Create([Bind("Id,Nome,Descricao,CategoriaId,VendedorId,Preco,QuantidadeEstoque,UnidadeVenda,ImagemUpload")] ProdutoIncluirViewModel produto)
@@ -91,7 +96,18 @@ namespace Acme.Store.UI.Mvc.Controllers
                 var formFile = produto.ImagemUpload;
                 var prod = _mapper.Map<Produto>(produto);
 
-                //await _produtoService.Adicionar(prod, formFile);
+                if (!_aspNetUser.IsInRole(Roles.Admin))
+                {
+                    var vendedor = await _vendedorRepository.ObterPorEmail(_aspNetUser.GetUserEmail());
+                    if (vendedor == null)
+                    {
+                        NotificarErro("O usuário logado não está cadastrado como vendedor.");
+                        return View(produto);
+                    }
+                    prod.VendedorId = vendedor.Id;
+                }
+
+                await _produtoService.Adicionar(_aspNetUser, prod, formFile);
 
                 if (OperacaoValida())
                 {
@@ -101,12 +117,14 @@ namespace Acme.Store.UI.Mvc.Controllers
             }
 
             produto.CategoriasSelectList = await ObterCategoriasSelectList(produto.CategoriaId);
-            produto.VendedoresSelectList = await ObterVendedoresSelectList(produto.CategoriaId);
+            if (_aspNetUser.IsInRole(Roles.Admin))
+            {
+                produto.VendedoresSelectList = await ObterVendedoresSelectList(produto.VendedorId);
+            }
 
             return View(produto);
         }
 
-        // GET: ProdutosController/Edit/5
         [Route("editar/{id:guid}")]
         public async Task<ActionResult> Edit(Guid? id)
         {
@@ -115,7 +133,7 @@ namespace Acme.Store.UI.Mvc.Controllers
                 return NotFound();
             }
 
-            var produto = await _produtoRepository.ObterPorId(id.Value);
+            var produto = await _produtoService.ObterPorId(_aspNetUser, id.Value);
             if (produto == null)
             {
                 return NotFound();
@@ -123,12 +141,14 @@ namespace Acme.Store.UI.Mvc.Controllers
 
             var produtoVM = _mapper.Map<ProdutoEditarViewModel>(produto);
             produtoVM.CategoriasSelectList = await ObterCategoriasSelectList(produtoVM.CategoriaId);
-            produtoVM.VendedoresSelectList = await ObterVendedoresSelectList(produtoVM.VendedorId);
+            if (_aspNetUser.IsInRole(Roles.Admin))
+            {
+                produtoVM.VendedoresSelectList = await ObterVendedoresSelectList(produtoVM.VendedorId);
+            }
 
             return View(produtoVM);
         }
 
-        // POST: ProdutosController/Edit/5
         [HttpPost("editar/{id:guid}")]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Edit(Guid? id, [Bind("Id,Nome,Descricao,CategoriaId,VendedorId,Preco,QuantidadeEstoque,UnidadeVenda,ImagemUpload")] ProdutoEditarViewModel produto)
@@ -148,7 +168,18 @@ namespace Acme.Store.UI.Mvc.Controllers
                 var formFile = produto.ImagemUpload;
                 var prod = _mapper.Map<Produto>(produto);
 
-                //await _produtoService.Atualizar(prod, formFile);
+                if (!_aspNetUser.IsInRole(Roles.Admin))
+                {
+                    var vendedor = await _vendedorRepository.ObterPorEmail(_aspNetUser.GetUserEmail());
+                    if (vendedor == null)
+                    {
+                        NotificarErro("O usuário logado não está cadastrado como vendedor.");
+                        return View(produto);
+                    }
+                    prod.VendedorId = vendedor.Id;
+                }
+
+                await _produtoService.Atualizar(_aspNetUser, prod, formFile);
 
                 if (OperacaoValida())
                 {
@@ -158,7 +189,10 @@ namespace Acme.Store.UI.Mvc.Controllers
             }
 
             produto.CategoriasSelectList = await ObterCategoriasSelectList(produto.CategoriaId);
-            produto.VendedoresSelectList = await ObterVendedoresSelectList(produto.VendedorId);
+            if (_aspNetUser.IsInRole(Roles.Admin))
+            {
+                produto.VendedoresSelectList = await ObterVendedoresSelectList(produto.VendedorId);
+            }
 
             return View(produto);
         }
@@ -172,7 +206,7 @@ namespace Acme.Store.UI.Mvc.Controllers
                 return NotFound();
             }
 
-            var produto = _mapper.Map<ProdutoExibirViewModel>(await _produtoRepository.ObterPorId(id.Value));
+            var produto = _mapper.Map<ProdutoExibirViewModel>(await _produtoService.ObterPorId(_aspNetUser, id.Value));
             if (produto == null)
             {
                 return NotFound();
@@ -190,7 +224,7 @@ namespace Acme.Store.UI.Mvc.Controllers
                 return NotFound();
             }
 
-            await _produtoRepository.Remover(id.Value);
+            await _produtoService.Remover(_aspNetUser, id.Value);
 
             return RedirectOrReturn("Index", "Delete", produto);
         }

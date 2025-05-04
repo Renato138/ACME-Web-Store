@@ -11,6 +11,7 @@ using Acme.Store.Abstractions.Notitications;
 using Acme.Store.Auth.Models;
 using Acme.Store.Auth.Interfaces;
 using Acme.Store.Auth.Context;
+using Acme.Store.Auth.Services;
 
 namespace Acme.Store.UI.Mvc.Configurations
 {
@@ -28,6 +29,7 @@ namespace Acme.Store.UI.Mvc.Configurations
             builder.Services.AddScoped<ICategoriaRepository, CategoriaRepository>();
             builder.Services.AddScoped<IVendedorRepository, VendedorRepository>();
 
+            builder.Services.AddScoped<IUsuarioService, UsuarioService>();
             builder.Services.AddScoped<INotificador, Notificador>();
             builder.Services.AddScoped<IProdutoService, ProdutoService>();
             builder.Services.AddScoped<ICategoriaService, CategoriaService>();

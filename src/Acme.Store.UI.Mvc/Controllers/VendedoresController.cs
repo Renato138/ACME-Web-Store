@@ -9,9 +9,12 @@ using Acme.Store.UI.Mvc.Models;
 using Acme.Store.Business.Models;
 using Acme.Store.Data.Services;
 using Acme.Store.Abstractions.Interfaces;
+using Microsoft.AspNetCore.Authorization;
+using Acme.Store.Auth.Interfaces;
 
 namespace Acme.Store.UI.Mvc.Controllers
 {
+    [Authorize(Roles = "Admin")]
     [Route("vendedores")]
     public class VendedoresController : MainController
     {
@@ -23,13 +26,15 @@ namespace Acme.Store.UI.Mvc.Controllers
                                     IVendedorRepository vendedorRepository,
                                     IMapper mapper,
                                     INotificador notificador,
-                                    ILogger<MainController> logger) : base(notificador, logger)
+                                    ILogger<MainController> logger,
+                                    IAspNetUser aspNetUser) : base(notificador, logger, aspNetUser)
         {
             _vendedorService = vendedorService;
             _vendedorRepository = vendedorRepository;
             _mapper = mapper;
         }
 
+        [AllowAnonymous]
         public async Task<ActionResult> Index()
         {
             var vendedores = _mapper.Map<IEnumerable<VendedorViewModel>>(await _vendedorRepository.ObterTodos())
@@ -58,15 +63,17 @@ namespace Acme.Store.UI.Mvc.Controllers
         [Route("criar-novo")]
         public async Task<ActionResult> Create()
         {
-            var vendedor = _mapper.Map<VendedorViewModel>(new Vendedor());
+            var senha = GeneratePassword();
+            var vendedor = new VendedorIncluirViewModel();
+            vendedor.Senha = senha;
+            vendedor.ConfirmeSenha = senha;
 
             return View(vendedor);
         }
 
-        // POST: VendedoresController/Create
         [HttpPost("criar-novo")]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create([Bind("Id,Nome,Email")] VendedorViewModel vendedor)
+        public async Task<ActionResult> Create([Bind("Id,Nome,Email,Senha,ConfirmeSenha")] VendedorIncluirViewModel vendedor)
         {
             if (ModelState.IsValid)
             {
@@ -75,10 +82,9 @@ namespace Acme.Store.UI.Mvc.Controllers
                     return NotFound();
                 }
 
-                await _vendedorService.Adicionar(_mapper.Map<Vendedor>(vendedor));
+                await _vendedorService.Adicionar(_mapper.Map<Vendedor>(vendedor), vendedor.Senha, true);
 
                 return RedirectOrReturn(nameof(Index), nameof(Create), vendedor);
-
             }
             return View(vendedor);
         }
@@ -153,5 +159,33 @@ namespace Acme.Store.UI.Mvc.Controllers
 
             return RedirectOrReturn("Index", "Delete", vendedor);
         }
+
+        private static string GeneratePassword()
+        {
+            // Parte 1
+            var random = new Random();
+
+            var chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+";
+            var part1 = new string(Enumerable.Repeat(chars, 8).Select(s => s[random.Next(s.Length)]).ToArray());
+
+            // Parte 2
+            chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            var part2 = chars[random.Next(chars.Length)].ToString();
+
+            // Parte 3
+            chars = "abcdefghijklmnopqrstuvwxyz";
+            var part3 = chars[random.Next(chars.Length) ].ToString();
+
+            // Parte 4
+            chars = "0123456789";
+            var part4 = chars[random.Next(chars.Length)].ToString();
+
+            // Parte 5
+            chars = ".!?*";
+            var part5 = chars[random.Next(chars.Length)].ToString();
+
+            return $"{part1}{part2}{part3}{part4}{part5}";
+        }
+
     }
 }

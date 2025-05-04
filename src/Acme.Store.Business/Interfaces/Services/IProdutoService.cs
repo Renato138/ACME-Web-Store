@@ -9,7 +9,11 @@ namespace Acme.Store.Business.Interfaces.Services
 {
     public interface IProdutoService : IBaseService<ProdutoValidator, Produto>
     {
+        Task<IEnumerable<Produto>> ObterTodos();
+
         Task<IEnumerable<Produto>> ObterTodos(IAspNetUser aspNetUser);
+
+        Task<IEnumerable<Produto>> ObterPorCategoria(Guid categoriaId);
 
         Task<IEnumerable<Produto>> ObterPorCategoria(IAspNetUser aspNetUser, Guid categoriaId);
 

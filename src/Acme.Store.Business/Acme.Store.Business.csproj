@@ -12,6 +12,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Acme.Store.Abstractions\Acme.Store.Abstractions.csproj" />
+    <ProjectReference Include="..\Acme.Store.Identity\Acme.Store.Auth.csproj" />
   </ItemGroup>
 
 </Project>

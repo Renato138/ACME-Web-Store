@@ -30,14 +30,11 @@ namespace Acme.Store.Api.Controllers
             _mapper = mapper;
         }
 
+        [AllowAnonymous]
         [HttpGet]
         public async Task<IEnumerable<ProdutoExibirViewModel>> ObterTodos()
         {
-            if (!_aspNetUser.IsAuthenticated)
-                return (new ProdutoExibirViewModel[] { });
-
-            return _mapper.Map<IEnumerable<ProdutoExibirViewModel>>(_produtoService.ObterTodos(_aspNetUser));
-
+            return _mapper.Map<IEnumerable<ProdutoExibirViewModel>>(_produtoService.ObterTodos());
         }
 
         [HttpGet("{id:guid}")]
@@ -59,14 +56,11 @@ namespace Acme.Store.Api.Controllers
             return _mapper.Map<ProdutoExibirViewModel>(produto);
         }
 
+        [AllowAnonymous]
         [HttpGet("obter-por-categoria/{categoriaId:guid}")]
         public async Task<IEnumerable<ProdutoExibirViewModel>> ObterPorCategoria(Guid categoriaId)
         {
-            if (!_aspNetUser.IsAuthenticated)
-                return (new ProdutoExibirViewModel[] { });
-
-            return _mapper.Map<IEnumerable<ProdutoExibirViewModel>>(await _produtoService.ObterPorCategoria(_aspNetUser, categoriaId));
-
+            return _mapper.Map<IEnumerable<ProdutoExibirViewModel>>(await _produtoService.ObterPorCategoria(categoriaId));
         }
 
         [HttpPost]

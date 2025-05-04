@@ -30,15 +30,6 @@ namespace Acme.Store.UI.Mvc.Configurations
             .AddRoles<IdentityRole>()
             .AddEntityFrameworkStores<AcmeIdentityDbContext>();
 
-            //builder.Services.AddAuthorization(options =>
-            //{
-            //    options.AddPolicy("PodeExcluirPermanentemente", policy =>
-            //        policy.RequireRole("Admin"));
-
-            //    options.AddPolicy("VerProdutos", policy =>
-            //        policy.RequireClaim("Produtos", "VI"));
-            //});
-
             return builder;
         }
     }

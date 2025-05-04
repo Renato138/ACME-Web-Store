@@ -18,28 +18,22 @@ namespace Acme.Store.Business.Validators
                 .Length(ProdutoModelInfo.NomeMinLength, ProdutoModelInfo.NomeMaxLength).WithMessage("O campo {PropertyName} precisa ter entre {MinLength} e {MaxLength} caracteres.");
 
             RuleFor(p => p.Descricao)
-                .NotEmpty().WithMessage("O campo {PropertyName} precisa ser fornecido.")
+                .NotEmpty().WithMessage("O campo Descrição precisa ser fornecido.")
                 .Length(ProdutoModelInfo.DescricaoMinLength, ProdutoModelInfo.DescricaoMaxLength).WithMessage("O campo {PropertyName} precisa ter entre {MinLength} e {MaxLength} caracteres.");
 
             RuleFor(p => p.Preco)
-                .GreaterThanOrEqualTo(0).WithMessage("O campo {PropertyName} não pode ser negativo.");
+                .GreaterThanOrEqualTo(0).WithMessage("O campo Preço não pode ser negativo.");
 
             RuleFor(p => p.QuantidadeEstoque)
-                .GreaterThanOrEqualTo(0).WithMessage("O campo {PropertyName} não pode ser negativo.");
+                .GreaterThanOrEqualTo(0).WithMessage("O campo Quantidade em Estoque não pode ser negativo.");
 
             RuleFor(p => p.VendedorId)
-                .NotEqual(Guid.Empty).WithMessage("O campo {PropertyName} precisa ser fornecido.")
+                .NotEqual(Guid.Empty).WithMessage("O campo Vendedor precisa ser fornecido.")
                 .NotNull().WithMessage("O campo {PropertyName} precisa ser fornecido.");
-
-            //RuleFor(p => p.Vendedor)
-            //    .NotNull().WithMessage("O campo {PropertyName} precisa ser fornecido.");
 
             RuleFor(p => p.CategoriaId)
-                .NotEqual(Guid.Empty).WithMessage("O campo {PropertyName} precisa ser fornecido.")
+                .NotEqual(Guid.Empty).WithMessage("O campo Categoria precisa ser fornecido.")
                 .NotNull().WithMessage("O campo {PropertyName} precisa ser fornecido.");
-
-            //RuleFor(p => p.Categoria)
-            //    .NotNull().WithMessage("O campo {PropertyName} precisa ser fornecido.");
         }
     }
 }
