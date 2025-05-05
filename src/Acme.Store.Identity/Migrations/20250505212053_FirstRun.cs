@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Acme.Store.Auth.Migrations
 {
     /// <inheritdoc />
-    public partial class AcmeIdentitycs : Migration
+    public partial class FirstRun : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

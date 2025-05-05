@@ -31,20 +31,20 @@ namespace Acme.Store.Api.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<ActionResult> Login(UsuarioViewModel usuarioViewModel)
+        public async Task<ActionResult> Login(LoginViewModel loginViewModel)
         {
             if (!ModelState.IsValid)
             {
                 return CustomResponse(ModelState);
             }
 
-            var usuario = _mapper.Map<Usuario>(usuarioViewModel);
+            var usuario = _mapper.Map<Usuario>(loginViewModel);
 
             var token = await _usuarioService.LogarApi(usuario, _tokenSettings, false, true);
             
             if (string.IsNullOrWhiteSpace(token))
             {
-                return CustomResponse(usuarioViewModel);
+                return CustomResponse(loginViewModel);
             }
 
             return CustomResponse(token);

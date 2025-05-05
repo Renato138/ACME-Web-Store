@@ -5,6 +5,7 @@ using Acme.Store.Business.Interfaces;
 using Acme.Store.Business.Interfaces.Repositories;
 using Acme.Store.Business.Interfaces.Services;
 using Acme.Store.Business.Models;
+using Acme.Store.Data.Repositories;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -17,16 +18,19 @@ namespace Acme.Store.Api.Controllers
     [Route("api/produtos")]
     public class ProdutosController : MainController
     {
+        private readonly IProdutoRepository _produtoRepository;
         private readonly IProdutoService _produtoService;
         private readonly IMapper _mapper;
 
         public ProdutosController(IProdutoService produtoService,
+                                  IProdutoRepository produtoRepository,
                                   IMapper mapper,
                                   ILogger<ProdutosController> logger,
                                   INotificador notificador,
                                   IAspNetUser aspNetUser) : base(notificador, logger, aspNetUser)
         {
             _produtoService = produtoService;
+            _produtoRepository = produtoRepository;
             _mapper = mapper;
         }
 
@@ -34,7 +38,7 @@ namespace Acme.Store.Api.Controllers
         [HttpGet]
         public async Task<IEnumerable<ProdutoExibirViewModel>> ObterTodos()
         {
-            return _mapper.Map<IEnumerable<ProdutoExibirViewModel>>(_produtoService.ObterTodos());
+            return _mapper.Map<IEnumerable<ProdutoExibirViewModel>>(await _produtoRepository.ObterTodos());
         }
 
         [HttpGet("{id:guid}")]

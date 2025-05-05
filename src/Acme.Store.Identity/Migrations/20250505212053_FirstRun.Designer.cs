@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Acme.Store.Auth.Migrations
 {
     [DbContext(typeof(AcmeIdentityDbContext))]
-    [Migration("20250426184248_AcmeIdentity.cs")]
-    partial class AcmeIdentitycs
+    [Migration("20250505212053_FirstRun")]
+    partial class FirstRun
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

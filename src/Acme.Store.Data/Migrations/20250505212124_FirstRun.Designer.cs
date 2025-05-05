@@ -11,14 +11,14 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Acme.Store.Data.Migrations
 {
     [DbContext(typeof(AcmeDbContext))]
-    [Migration("20250407020509_Criacao_Inicial")]
-    partial class Criacao_Inicial
+    [Migration("20250505212124_FirstRun")]
+    partial class FirstRun
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
-            modelBuilder.HasAnnotation("ProductVersion", "9.0.3");
+            modelBuilder.HasAnnotation("ProductVersion", "9.0.4");
 
             modelBuilder.Entity("Acme.Store.Business.Models.Categoria", b =>
                 {
@@ -54,7 +54,7 @@ namespace Acme.Store.Data.Migrations
 
                     b.Property<string>("Imagem")
                         .IsRequired()
-                        .HasColumnType("varchar(3000)");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Nome")
                         .IsRequired()

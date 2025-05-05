@@ -19,12 +19,11 @@ namespace Acme.Store.Api.Configuration
     {
         public static WebApplicationBuilder ResolveDependencies(this WebApplicationBuilder builder)
         {
-            builder.Services.AddAutoMapper(typeof(AutoMapperConfigProfile)); ;
-
-            builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            //builder.Services.AddAutoMapper(typeof(AutoMapperConfigProfile)); ;
 
             builder.Services.AddScoped<AcmeDbContext>();
             builder.Services.AddScoped<AcmeIdentityDbContext>();
+
             builder.Services.AddScoped<IProdutoRepository, ProdutoRepository>();
             builder.Services.AddScoped<ICategoriaRepository, CategoriaRepository>();
             builder.Services.AddScoped<IVendedorRepository, VendedorRepository>();
@@ -34,9 +33,12 @@ namespace Acme.Store.Api.Configuration
             builder.Services.AddScoped<ICategoriaService, CategoriaService>();
             builder.Services.AddScoped<IVendedorService, VendedorService>();
             builder.Services.AddScoped<IUsuarioService, UsuarioService>();
+            builder.Services.AddScoped<IAspNetUser, AspNetUser>();
 
             builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-            builder.Services.AddScoped<IAspNetUser, AspNetUser>();
+
+            //builder.Services.AddTransient<IConfigureOptions<SwaggerGenOptions>, ConfigureSwaggerOptions>();
+
 
             return builder;
         }

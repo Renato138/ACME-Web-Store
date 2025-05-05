@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Acme.Store.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class Criacao_Inicial : Migration
+    public partial class FirstRun : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -55,7 +55,7 @@ namespace Acme.Store.Data.Migrations
                     QuantidadeEstoque = table.Column<int>(type: "int", nullable: false, defaultValue: 0),
                     CategoriaId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     VendedorId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Imagem = table.Column<string>(type: "varchar(3000)", nullable: false)
+                    Imagem = table.Column<string>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {

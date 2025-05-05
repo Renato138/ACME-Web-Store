@@ -46,8 +46,8 @@ namespace Acme.Store.Data.TypeConfigurations
                 .IsRequired()
                 .HasColumnType("uniqueidentifier");
 
-            builder.Property(p => p.Imagem)
-                .HasColumnType("varchar(3000)");
+            //builder.Property(p => p.Imagem)
+            //    .HasColumnType();
 
             //builder.Property(p => p.DataHoraCriacao)
             //    .IsRequired()

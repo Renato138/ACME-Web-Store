@@ -1,6 +1,11 @@
-﻿//using HealthChecks.UI.Client;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Mvc;
+using Asp.Versioning;
+//using Acme.Store.Api.Extensions;
+using HealthChecks.UI.Client;
+using Microsoft.AspNetCore.Diagnostics;
+using Acme.Store.Api.Extensions;
 
 namespace Acme.Store.Api.Configuration
 {
@@ -10,10 +15,21 @@ namespace Acme.Store.Api.Configuration
         {
             services.AddControllers();
 
+            services.AddApiVersioning(options =>
+            {
+                options.AssumeDefaultVersionWhenUnspecified = true;
+                options.DefaultApiVersion = new ApiVersion(1, 0);
+                options.ReportApiVersions = true;
+            })
+            .AddApiExplorer(options =>
+            {
+                options.GroupNameFormat = "'v'VVV";
+                options.SubstituteApiVersionInUrl = true;
+            });
+
             services.Configure<ApiBehaviorOptions>(options =>
             {
                 options.SuppressModelStateInvalidFilter = true;
-
             });
 
             return services;
@@ -29,6 +45,8 @@ namespace Acme.Store.Api.Configuration
             {
                 app.UseHsts();
             }
+
+            app.UseMiddleware<ExceptionMiddleware>();
 
             app.UseHttpsRedirection();
 

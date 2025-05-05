@@ -22,7 +22,7 @@ namespace Acme.Store.Data.Context
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             foreach (var property in modelBuilder.Model.GetEntityTypes().SelectMany(
-                        e => e.GetProperties().Where(p => p.ClrType == typeof(string))))
+                        e => e.GetProperties().Where(p => p.Name != "Imagem" && p.ClrType == typeof(string))))
             {
                 property.SetColumnType("varchar(100)");
             }

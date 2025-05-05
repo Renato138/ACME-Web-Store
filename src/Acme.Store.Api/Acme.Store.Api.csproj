@@ -7,6 +7,9 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Asp.Versioning.Mvc" Version="8.1.0" />
+    <PackageReference Include="Asp.Versioning.Mvc.ApiExplorer" Version="8.1.0" />
+    <PackageReference Include="AspNetCore.HealthChecks.UI.Client" Version="9.0.0" />
     <PackageReference Include="AutoMapper" Version="14.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.4" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="9.0.4" />
@@ -27,6 +30,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Acme.Store.Abstractions\Acme.Store.Abstractions.csproj" />
     <ProjectReference Include="..\Acme.Store.Business\Acme.Store.Business.csproj" />
     <ProjectReference Include="..\Acme.Store.Data\Acme.Store.Data.csproj" />
     <ProjectReference Include="..\Acme.Store.Identity\Acme.Store.Auth.csproj" />

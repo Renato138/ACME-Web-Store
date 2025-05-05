@@ -19,12 +19,15 @@ namespace Acme.Store.Api.Configuration
             {
                 builder.Services.AddDbContext<AcmeIdentityDbContext>(o =>
                     o.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnectionSQLite")));
+                //builder.Services.AddDbContext<AcmeIdentityDbContext>(o =>
+                //    o.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
             }
             else
             {
-                builder.Services.AddDbContext<AcmeIdentityDbContext>(o =>
-                    o.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+                builder.Services.AddDbContext<AcmeIdentityDbContext>(options =>
+                    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
             }
+
 
             builder.Services.AddDefaultIdentity<IdentityUser>()
                 .AddRoles<IdentityRole>()
@@ -33,16 +36,17 @@ namespace Acme.Store.Api.Configuration
 
             // JWT
 
-            var appSettingsSection = builder.Configuration.GetSection("TokenSettings");
-            builder.Services.Configure<TokenSettings>(appSettingsSection);
+            var tokenSettingsSection = builder.Configuration.GetSection("TokenSettings");
+            builder.Services.Configure<TokenSettings>(tokenSettingsSection);
 
-            var appSettings = appSettingsSection.Get<TokenSettings>();
-            var key = Encoding.ASCII.GetBytes(appSettings.Secret);
+            var tokenSettings = tokenSettingsSection.Get<TokenSettings>();
+            var key = Encoding.UTF8.GetBytes(tokenSettings.Secret);
+            var secureKey = new SymmetricSecurityKey(key);
 
-            builder.Services.AddAuthentication(auth =>
+            builder.Services.AddAuthentication(x =>
             {
-                auth.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                auth.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
             }).AddJwtBearer(x =>
             {
                 x.RequireHttpsMetadata = true;
@@ -53,12 +57,15 @@ namespace Acme.Store.Api.Configuration
                     IssuerSigningKey = new SymmetricSecurityKey(key),
                     ValidateIssuer = true,
                     ValidateAudience = true,
-                    ValidAudience = appSettings.ValidoEm,
-                    ValidIssuer = appSettings.Emissor
+                    ValidAudience = tokenSettings.ValidoEm,
+                    ValidIssuer = tokenSettings.Emissor
                 };
             });
+
+            //builder.Services.AddAuthorization();
 
             return builder;
         }
     }
+
 }

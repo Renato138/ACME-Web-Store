@@ -20,7 +20,7 @@ builder
 
 var app = builder.Build();
 
-app.UseMvcConfiguration()
-   .UseDbMigrationHelper();
+app.UseMvcConfiguration();
+app.UseDbMigrationHelper();
 
 app.Run();

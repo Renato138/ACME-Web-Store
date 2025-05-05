@@ -20,11 +20,18 @@ namespace Acme.Store.Auth.Models
         }
 
         public string Name 
-            => _accessor.HttpContext.User == null || _accessor.HttpContext.User.Identity == null ? string.Empty : _accessor.HttpContext.User.Identity.Name;
+            => (_accessor.HttpContext.User == null || _accessor.HttpContext.User.Identity == null ? string.Empty : _accessor.HttpContext.User.Identity.Name) ?? "";
 
         public Guid GetUserId()
         {
-            return IsAuthenticated ? Guid.Parse(_accessor.HttpContext.User.GetUserId()) : Guid.Empty;
+            var guidId = Guid.Empty;
+
+            if (IsAuthenticated)
+            {
+                var id = _accessor.HttpContext.User.GetUserId();
+                guidId = string.IsNullOrWhiteSpace(id) ? Guid.Empty : Guid.Parse(id);
+            }
+            return guidId;
         }
 
         public string GetUserEmail()
