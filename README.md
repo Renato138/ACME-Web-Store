@@ -111,9 +111,9 @@ ele irá criar:
    - E-mail/Loging: coiote@acme.com
    - Senha: Coiote!138
   
- - Três categorias de produtos. 
+ - Cinco categorias de produtos. 
   
- - Quatro produtos, dois para o primeiro vendedor e outros dois para o segundo.
+ - Cinco produtos, dois para o primeiro vendedor e três para o segundo.
 
 Voce pode utilizar qualquer dos usuário acima para logar na aplicação.
   
