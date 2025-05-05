@@ -82,14 +82,14 @@ A estrutura do projeto é organizada da seguinte forma:
    - Quando executando em modo de Desenvolvimento o sistema se conectará com o banco SQLite, não sendo necessário uma instância do SQL Server.
 
 3. **Executar a Aplicação MVC:**
-   - `cd src/Blog.Mvc/`
+   - `cd src/Acme.Store.UI.Mvc/`
    - `dotnet run`
    - Acesse a aplicação em: https://localhost:7049/
 
-4. **Executar a API:** (em desenvolvimento)
-   - `cd src/Blog.Api/`
+4. **Executar a API:**
+   - `cd src/Acme.Store.Api/`
    - `dotnet run`
-   - Acesse a documentação da API em: http://localhost:5001/swagger
+   - Acesse a documentação da API em: https://localhost:7268/swagger/
 
 ## **8. Primeira execução**
 Em caso de primeira execução em modo desenvolvimento, delete a pasta Database contida tanto no projeto de interface de usuário (Acme.Store.UI.Mvc), quanto do projeto da API. Em modo de desenvolvimento estas base são distintas e contida em cada projeto.
@@ -126,7 +126,36 @@ A documentação da API está disponível através do Swagger. Após iniciar a A
 
 http://localhost:5001/swagger
 
-## **10. Avaliação**
+## **10. Funcionalidades da aplicação**
+
+As funcionalidades da aplicação são basicamente as mesmas, tanto para a API, quanto para a interface MVC:
+
+1. **Produtos:**
+   - A controller de Produtos está acessível apenas para usuários autenticados, entranto a lista de todos os produtos e lista por categoria é acessível para qualquer pessoa, mesmo que não esteja logada.
+   - Usuários autenticados podem cadastror novos produtos, e o produto será atribuido ao usuário/vendedor que realizou o cadastro.
+   - A alteração e exclusão do produto só é possível de ser feito pelo usuário/vendedor que realizou o cadastro do mesmo.
+   - No entanto o usuário Administrador pode cadastrar novos produtos para qualquer usuário/vendedor, bem como fazer a alteração e exclusão de qualquer produto.
+   - Não são permitidos nomes duplicados para os produtos, bem como estoque ou preço negativo.
+
+2. **Categorias:**
+   - A controller de Produtos está acessível apenas para usuários autenticados.
+   - A inclusão, alteração e/ou exclusão das categorias pode ser feita por qualquer usuário/vendedor altenticado.
+   - A exclusão, no entanto, só pode ser feita se não houver produtos associados à categoria.
+   - Não são permitidos nomes duplicados para as categorias.
+
+3. **Vendedores/Usuários:**
+   - A controller de Vendedores está acessível apenas para usuários que possua a regra Admin.
+   - A inclusão/registro de um novo vendedor/usuário pode ser feito por qualquer pessoa.
+   - A alteração e exclusão dos vendedores/usuários só pode ser feita pelo usuário que possua a regra Admin.
+   - A troca da senha está disponível após o usuário estiver logado no menu Setting/Sua conta e pode ser feita por qualquer usuário.
+   - Não é permitido criar usuários administradores, este é criado automaticamente pelo sistema.
+
+4. **Login:**
+   - O login na API é feito pela controller Auth através do método POST: /Login. Deve ser fornecido o email e a senha do usuário. Se o login for bem sucedico será devolvida o token JWT para o que seja usada nas chamadas da API que precisam de autenticação.
+   - O login na aplicação interface MVC é feito através do menu Login. O usuário deve fornecer seu email e senha e, caso queira acessar diretamente sem necessidade de fazer login na próxima vez que utilizar a aplicação, deve selecionar a opção "Lembrar-me?" na tela de Login.
+   - Obs.: Apesar de na tela de login aparecer a opção "Esqueceu sua senha?", esta não está ativa, pois não foi pré-requisito funcional. Mas poderá está dsponível numa próxima versão.
+
+## **11. Avaliação**
 
 - Este projeto é parte de um curso acadêmico e não aceita contribuições externas. 
 - Para feedbacks ou dúvidas utilize o recurso de Issues
