@@ -124,7 +124,7 @@ Voce pode utilizar qualquer dos usuário acima para logar na aplicação.
 
 A documentação da API está disponível através do Swagger. Após iniciar a API, acesse a documentação em:
 
-http://localhost:5001/swagger
+https://localhost:7268/swagger
 
 ## **10. Funcionalidades da aplicação**
 
@@ -146,6 +146,12 @@ As funcionalidades da aplicação são basicamente as mesmas, tanto para a API, 
 3. **Vendedores/Usuários:**
    - A controller de Vendedores está acessível apenas para usuários que possua a regra Admin.
    - A inclusão/registro de um novo vendedor/usuário pode ser feito por qualquer pessoa.
+   - Requisitos da senha:
+       - A senha tem que ter tamanho mínimo de 8 e no máximo 15 caracteres.
+       - Deve conter ao menos um caracter maiúsculo.
+       - Deve conter ao menos um caracter minúsculo.
+       - Deve conter ao menos um caracter numérico de 0 a 9.
+       - Deve conter ao menos um dos seguites caracteres: '.', '!', '?', '*'
    - A alteração e exclusão dos vendedores/usuários só pode ser feita pelo usuário que possua a regra Admin.
    - A troca da senha está disponível após o usuário estiver logado no menu Setting/Sua conta e pode ser feita por qualquer usuário.
    - Não é permitido criar usuários administradores, este é criado automaticamente pelo sistema.
