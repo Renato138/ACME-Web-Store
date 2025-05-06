@@ -140,7 +140,7 @@ namespace Acme.Store.FirstRun
                     new Produto
                     {
                         Nome = "Catapulta Maginum 1000",
-                        Descricao = "Catapulta de alta performance. Cuidado! Ele pode até laçá-lo à estratosfera.",
+                        Descricao = "Catapulta de alta performance. Cuidado! Ele pode até lançá-lo à estratosfera.",
                         UnidadeVenda = UnidadeVenda.Peca,
                         Preco = 13800.0,
                         QuantidadeEstoque = 50,
@@ -153,7 +153,7 @@ namespace Acme.Store.FirstRun
                     new Produto
                     {
                         Nome = "Tijolo barra papa-leguas",
-                        Descricao = "Tijolo de alta resistência, ideal para construir barreira para papa-leguas..",
+                        Descricao = "Tijolo de alta resistência, ideal para construir barreiras contra papa-leguas..",
                         UnidadeVenda = UnidadeVenda.MetroCubico,
                         Preco = 333.66,
                         QuantidadeEstoque = 20000,
