@@ -82,10 +82,10 @@
 |-------------------------------|----------|----------|------------------------------------------|
 | **Funcionalidade**            | 30%      | 10       | 3,0                                      |
 | **Qualidade do Código**       | 20%      | 10       | 2,0                                      |
-| **Eficiência e Desempenho**   | 20%      | 6        | 1,2                                      |
+| **Eficiência e Desempenho**   | 20%      | 7        | 1,2                                      |
 | **Inovação e Diferenciais**   | 10%      | 10       | 1,0                                      |
 | **Documentação e Organização**| 10%      | 8        | 0,8                                      |
 | **Resolução de Feedbacks**    | 10%      | 10       | 1,0                                      |
 | **Total**                     | 100%     | -        | **9,0**                                  |
 
-## 🎯 **Nota Final: 9 / 10**
+## 🎯 **Nota Final: 9,2 / 10**
